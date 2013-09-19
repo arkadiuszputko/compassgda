@@ -1,0 +1,33 @@
+html, body {
+	margin: 0;
+}
+
+body {
+	background: #fafafa;
+	font-size: 62.5%;
+	color: #333;
+}
+
+h1,
+h2,
+h3 {
+	font-family: $source;
+}
+
+p,
+a,
+span,
+i,
+b {
+	font-family: $sans;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.container {
+	width: 100%;
+}

@@ -1,31 +1,9 @@
 @import "compass";
 @import "normalize";
 @import "variables";
+@import "common";
+@import "slider";
 
-/* Put your CSS here */
-html, body {
-	margin: 0;
-}
+/* Here we import all jebane sass files */
 
-body {
-	background: #fafafa;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #333;
-}
-.container {
-  width: 100%;
-}
-ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	@extend .clearfix;
 
-  li {
-  	display: block;
-  	float: left;
-  	height: 500px;
-	width: 50%;
-	background-size: cover;
-  }
-}
