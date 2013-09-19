@@ -1,15 +1,13 @@
 angular.module('foursquareAPI', ['ngResource']).
-    factory('foursquareService', function($resource){
+    factory('foursquareService', function($resource, FOURSQUARE_API_ADDRESS, FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET){
         return $resource(
-            'https://api.foursquare.com/v2/venues/explore?' + 'll=:ll&client_id=:client_id&client_secret=:client_secret&venuePhotos=1&v=:v&locale=:locale',
+            FOURSQUARE_API_ADDRESS + 'venues/explore?' + 'll=:ll&client_id=' + FOURSQUARE_CLIENT_ID + '&client_secret=' + FOURSQUARE_CLIENT_SECRET + '&venuePhotos=1&v=:v&locale=:locale',
             {},
             {
                 query: {
                     method:'GET',
                     params: {
                         ll: 'll',
-                        client_id: 'client_id',
-                        client_secret: 'client_secret',
                         v: 'date',
                         locale: 'locale'
                     },

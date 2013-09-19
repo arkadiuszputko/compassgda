@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('compassgdaApp', ['ngRoute', 'foursquareAPI'])
+angular.module('compassgdaApp', ['ngRoute', 'foursquareAPI', 'venues'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

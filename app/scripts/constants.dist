@@ -1,0 +1,4 @@
+angular.module('compassgdaApp')
+    .constant('FOURSQUARE_API_ADDRESS', 'provide api address with version')
+    .constant('FOURSQUARE_CLIENT_ID', 'add client id')
+    .constant('FOURSQUARE_CLIENT_SECRET', 'add client secret')
