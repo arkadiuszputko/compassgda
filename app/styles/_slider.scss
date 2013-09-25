@@ -26,7 +26,7 @@ ul {
 		background: url(../images/overlay.png);
 	}
 
-	.big-photo {
+	&.big-photo {
 		.venue-description {
 			position: absolute;
 			background: rgba(0,0,0,.5);
@@ -55,7 +55,7 @@ ul {
 		        margin: 0 0 20px 0;
 		        line-height: 1;
 		        letter-spacing: .1em;
-				
+
 				&:after {
 					content: ". . .";
 					text-align: center;
@@ -75,11 +75,12 @@ ul {
 				font-size: 2em;
 				font-weight: 100;
 				margin: 0;
+                padding: 0;
 			}
 		}
 	}
 
-	.small-photo {
+	&.small-photo {
 		.cover-image {
 			position: absolute;
 			top: 0;
@@ -119,7 +120,7 @@ ul {
 		        margin: 0 0 20px 0;
 		        line-height: 1;
 		        letter-spacing: .1em;
-				
+
 				&:after {
 					content: ". . .";
 					text-align: center;

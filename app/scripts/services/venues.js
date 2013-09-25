@@ -1,6 +1,8 @@
 angular.module('venues', []).
     factory('venuesService', function(photoService) {
 
+        var venues = [];
+
         var getTemplateUrl = function (item) {
             if (item.venue.photos.groups[0].items[0].height > 620) {
                 return 'views/bigPhoto.html';
@@ -11,8 +13,7 @@ angular.module('venues', []).
 
         return {
             decorateVenues: function (items) {
-                var venues = [];
-
+                console.log(venues);
                 angular.forEach(items, function(item){
                     var venue = {
                         id: item.venue.id,
