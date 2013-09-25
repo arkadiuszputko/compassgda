@@ -1,6 +1,14 @@
 angular.module('venues', []).
     factory('venuesService', function(photoService) {
 
+        var getTemplateUrl = function (item) {
+            if (item.venue.photos.groups[0].items[0].height > 620) {
+                return 'views/bigPhoto.html';
+            } else {
+                return 'views/smallPhoto.html';
+            }
+        }
+
         return {
             decorateVenues: function (items) {
                 var venues = [];
@@ -19,6 +27,9 @@ angular.module('venues', []).
                             text: item.tips[0].text
                         },
                         rating: item.rating,
+                        template: {
+                            url: getTemplateUrl(item)
+                        }
                     };
                     venues.push(venue);
                 });
