@@ -1,9 +1,5 @@
 <ul>
-    <li ng-repeat="venue in venues" style="background-image: url('{{venue.photo.url}}')">
-    	<div class="cover"></div>
-    	<section class="venue-description">
-	        <h1>{{venue.name}}</h1>
-	        <p class="tip">{{venue.tip.text}}</p>
-        </section>
+    <li ng-repeat="venue in venues" ng-show="venue.current" ng-click="getNextVenue($index)">
+        <div ng-include="venue.template.url"></div>
     </li>
-</ul>
+</li>
