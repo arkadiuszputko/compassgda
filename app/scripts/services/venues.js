@@ -1,9 +1,5 @@
 angular.module('venues', []).
-    factory('venuesService', function() {
-
-        function getImageUrl(prefix, suffix, w, h) {
-            return prefix + w + 'x' + h + suffix;
-        }
+    factory('venuesService', function(photoService) {
 
         return {
             decorateVenues: function (items) {
@@ -14,12 +10,7 @@ angular.module('venues', []).
                         id: item.venue.id,
                         name: item.venue.name,
                         photo: {
-                            url: getImageUrl(
-                                item.venue.photos.groups[0].items[0].prefix,
-                                item.venue.photos.groups[0].items[0].suffix,
-                                item.venue.photos.groups[0].items[0].width,
-                                item.venue.photos.groups[0].items[0].height
-                            ),
+                            url: photoService.getImageUrl(item.venue.photos.groups[0].items[0]),
                             width: item.venue.photos.groups[0].items[0].width,
                             height: item.venue.photos.groups[0].items[0].height
                         },
@@ -33,6 +24,6 @@ angular.module('venues', []).
                 });
 
                 return venues;
-            }
+            },
         }
     });
