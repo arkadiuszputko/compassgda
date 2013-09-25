@@ -17,6 +17,20 @@ ul {
 	background-repeat: none;
 	background-position: center center;
 	background-size: cover;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+
+    &.hide {
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+
+
+    &.show {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
 	.cover {
 		position: absolute;
 		top: 0;

@@ -13,7 +13,6 @@ angular.module('venues', []).
 
         return {
             decorateVenues: function (items) {
-                console.log(venues);
                 angular.forEach(items, function(item){
                     var venue = {
                         id: item.venue.id,
@@ -24,13 +23,17 @@ angular.module('venues', []).
                             height: item.venue.photos.groups[0].items[0].height
                         },
                         tip: {
-                            userId: item.tips[0].user.id,
-                            text: item.tips[0].text
+                            userId: item.tips[0].user.id || '',
+                            text: item.tips[0].text || 'Sorry this venue doesn\'t have any tip but We are sure that this is a great place'
                         },
-                        rating: item.rating,
+                        rating: item.rating || 0,
                         template: {
                             url: getTemplateUrl(item)
-                        }
+                        },
+                        justHide: false,
+                        justShow: false,
+                        current: false,
+                        next: false
                     };
                     venues.push(venue);
                 });
