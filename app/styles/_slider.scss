@@ -1,3 +1,7 @@
+.ng-hide,
+.ng-show {
+    display: block!important;
+}
 ul {
 	list-style: none;
 	padding: 0;
@@ -6,6 +10,28 @@ ul {
 	bottom: 0;
 	left: 0;
 	right: 0;
+
+    li {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        -webkit-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+        display: block !important;
+
+        &.hidden {
+            -webkit-transition: all 0.5s ease-in-out;
+            transition: all 0.5s ease-in-out;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0);
+        }
+
+    }
 }
 
 .tpl {
@@ -17,19 +43,7 @@ ul {
 	background-repeat: none;
 	background-position: center center;
 	background-size: cover;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
 
-    &.hide {
-        -webkit-transform: translate3d(-100%, 0, 0);
-        transform: translate3d(-100%, 0, 0);
-    }
-
-
-    &.show {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
 
 	.cover {
 		position: absolute;
@@ -99,7 +113,7 @@ ul {
 			position: absolute;
 			top: 0;
 			right: 0;
-			width: 70%;
+			width: 55%;
 			height: 100%;
 			background-repeat: none;
 			background-position: center center;
@@ -107,11 +121,11 @@ ul {
 		}
 		.venue-description {
 			position: absolute;
-			background: #333;
+			background: #000;
 			top: 0;
 			left: 0;
 			margin: auto;
-			width: 30%;
+			width: 45%;
 			height: 100%;
 			-moz-box-sizing: border-box;
 			box-sizing: border-box;
@@ -126,14 +140,13 @@ ul {
 			h1 {
 				text-transform: uppercase;
 				display: inline-block;
-				font-size: 8em;
+				font-size: 5em;
 				position: relative;
 				text-shadow: 1px 1px 2px #000000;
 		        filter: dropshadow(color=#000000, offx=1, offy=1);
 		        font-weight: 900;
 		        margin: 0 0 20px 0;
 		        line-height: 1;
-		        letter-spacing: .1em;
 
 				&:after {
 					content: ". . .";
@@ -151,7 +164,7 @@ ul {
 
 			.tip {
 				font-family: $sans;
-				font-size: 2em;
+				font-size: 1.3em;
 				font-weight: 100;
 				margin: 0;
 			}

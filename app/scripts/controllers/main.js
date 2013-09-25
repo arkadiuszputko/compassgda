@@ -22,7 +22,7 @@ angular.module('compassgdaApp')
                 },
                 function success (res) {
                     $scope.venues = venuesService.decorateVenues(res.response.groups[0].items);
-                    $scope.venues[0].current = true;
+                    //$scope.venues[0].current = true;
                     $scope.venues[1].next = true;
                     $scope.venues[2].next = true;
                     currentOffset = currentOffset + currentLimit;
@@ -33,14 +33,19 @@ angular.module('compassgdaApp')
         getVenues();
 
         $scope.getNextVenue = function (index) {
-            $scope.venues[index].current = false;
-            $scope.venues[index].justHide = true;
-            $scope.venues[index + 1].justShow = true;
-            $scope.venues[index + 1].current = true;
-            $scope.venues[index + 2].next = true;
-            preloadImage($scope.venues[index + 2].photo.url);
-            $scope.venues[index + 3].next = true;
-            preloadImage($scope.venues[index + 3].photo.url);
+            var length = $scope.venues.length;
+            //$scope.venues[index].current = false;
+            $scope.venues[index].hideit = true;
+            /*$scope.venues[index].justHide = true;
+            $scope.venues[index + 1].justShow = true;*/
+            //$scope.venues[index + 1].current = true;
+            //$scope.venues[index + 2].next = true;
+            if (length - 2 > index) {
+                preloadImage($scope.venues[index + 2].photo.url);
+                preloadImage($scope.venues[index + 3].photo.url);
+            }
+            //$scope.venues[index + 3].next = true;
+
             if (index < currentOffset - 3) {
                 getVenues(currentOffset);
                 currentOffset = currentOffset + currentLimit;
