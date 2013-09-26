@@ -13,9 +13,7 @@ angular.module('venues', []).
 
         return {
             decorateVenues: function (items, offset) {
-                var maxZIndex = 1000,
-                    length = items.length;
-                    console.log(offset);
+                var maxZIndex = 1000;
                 angular.forEach(items, function(item, index){
                     var venue = {
                         id: item.venue.id,
