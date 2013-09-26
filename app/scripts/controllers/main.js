@@ -17,7 +17,7 @@ angular.module('compassgdaApp')
                     v: date,
                     locale: 'en',
                     limit: currentLimit,
-                    //section: 'food',
+                    section: 'food',
                     offset: offset || currentOffset
                 },
                 function success (res) {
