@@ -1,5 +1,5 @@
 <ul>
-    <li ng-repeat="venue in venues" ng-show="venue.current" ng-click="getNextVenue($index)">
+    <li ng-repeat="venue in venues" ng-class="{hidden: venue.hideit}" ng-click="getNextVenue($index)" style="z-index: {{venue.zIndex}};">
         <div ng-include="venue.template.url"></div>
     </li>
 </ul>
