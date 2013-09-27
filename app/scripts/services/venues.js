@@ -12,8 +12,7 @@ angular.module('venues', []).
         }
 
         return {
-            decorateVenues: function (items, offset) {
-                var maxZIndex = 1000;
+            decorateVenues: function (items) {
                 angular.forEach(items, function(item, index){
                     var venue = {
                         id: item.venue.id,
@@ -30,12 +29,7 @@ angular.module('venues', []).
                         rating: item.rating || 0,
                         template: {
                             url: getTemplateUrl(item)
-                        },
-                        justHide: false,
-                        justShow: false,
-                        current: false,
-                        next: false,
-                        zIndex: maxZIndex - offset - index
+                        }
                     };
                     venues.push(venue);
                 });

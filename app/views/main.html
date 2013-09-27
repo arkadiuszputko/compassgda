@@ -1,5 +1,5 @@
-<ul>
-    <li ng-repeat="venue in venues" ng-class="{hidden: venue.hideit}" ng-click="getNextVenue($index)" style="z-index: {{venue.zIndex}};">
+<ul class="venues" ng-class="{'forward': isForward, 'backward': isBack}">
+    <li class="venue" ng-repeat="venue in venues" ng-show="venue.current" ng-click="getNextVenue($index)">
         <div ng-include="venue.template.url"></div>
     </li>
 </ul>
