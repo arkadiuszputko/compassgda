@@ -1,5 +1,5 @@
-<ul class="venues" ng-class="{'forward': isForward, 'backward': isBack}">
-    <li class="venue" ng-repeat="venue in venues" ng-show="venue.current" ng-click="getNextVenue($index)">
+<ul ng-repeat="venues in venuesSections" class="venues {{venues.name}}" ng-class="{'forward': isForward, 'backward': isBack}" ng-show="venues.current">
+    <li class="venue" ng-repeat="venue in venues.venues" ng-show="venue.current" ng-click="getNextVenue(venues.venues, $index)">
         <div ng-include="venue.template.url"></div>
     </li>
 </ul>
