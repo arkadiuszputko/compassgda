@@ -152,9 +152,36 @@ body {
     height: 100%;
 }
 .venues {
-    position: relative;
+    position: absolute;
     width: 100%;
     height: 100%;
+    &.ng-hide {
+        display: block !important;
+        top: 100%;
+    }
+    &.ng-hide-remove,
+    &.ng-hide-add
+    {
+        -webkit-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+        -moz-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+        -ms-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+        -o-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+        transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    }
+
+    &.ng-hide-remove {
+        top: 100%;
+        &.ng-hide-remove-active {
+            top: 0;
+        }
+    }
+
+    &.ng-hide-add {
+        top: 0;
+        &.ng-hide-add-active{
+            top: -100%;
+        }
+    }
 }
 .venue {
     position: absolute;

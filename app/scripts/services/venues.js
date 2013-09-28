@@ -1,7 +1,7 @@
 angular.module('venues', []).
     factory('venuesService', function(photoService) {
 
-        var venues = [];
+        var venues = {};
 
         var getTemplateUrl = function (item) {
             if (item.venue.photos.groups[0].items[0].height > 620) {
@@ -12,7 +12,10 @@ angular.module('venues', []).
         }
 
         return {
-            decorateVenues: function (items) {
+            decorateVenues: function (items, section) {
+                if (!venues[section]) {
+                    venues[section] = [];
+                }
                 angular.forEach(items, function(item, index){
                     var venue = {
                         id: item.venue.id,
@@ -31,10 +34,10 @@ angular.module('venues', []).
                             url: getTemplateUrl(item)
                         }
                     };
-                    venues.push(venue);
+                    venues[section].push(venue);
                 });
 
-                return venues;
+                return venues[section];
             },
         }
     });
