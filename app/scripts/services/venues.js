@@ -1,5 +1,5 @@
 angular.module('venues', []).
-    factory('venuesService', function(photoService) {
+    factory('venuesService', function(photoService, categoriesService) {
 
         var venues = {};
 
@@ -32,6 +32,12 @@ angular.module('venues', []).
                         rating: item.rating || 0,
                         template: {
                             url: getTemplateUrl(item)
+                        },
+                        category: {
+                            id: item.venue.categories[0].id,
+                            name: item.venue.categories[0].name,
+                            sectionId: categoriesService.getSection(item.venue.categories[0].id).id,
+                            sectionName: categoriesService.getSection(item.venue.categories[0].id).name
                         }
                     };
                     venues[section].push(venue);
