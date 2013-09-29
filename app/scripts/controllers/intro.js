@@ -5,7 +5,7 @@ angular.module('compassgdaApp')
         var date = moment().format('YYYYMMDD');
         var getVenues = function () {
             foursquareService.query({
-                    ll: '52.229676,21.012229',
+                    ll: '40.714353,-74.005973',
                     v: date,
                     locale: 'en',
                     section: 'topPicks',
