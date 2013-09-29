@@ -4,7 +4,7 @@ angular.module('compassgdaApp')
     .controller('MainCtrl', function ($scope, $rootScope, $location, foursquareService, foursquareCategoriesService, categoriesService, venuesService) {
         var date = moment().format('YYYYMMDD'),
             currentOffset = 0,
-            currentLimit = 50,
+            currentLimit = 10,
             currentSectionIndex = 0,
             templates = [
                 { name: 'bigPhoto', url: 'views/bigPhoto.html'},
@@ -12,6 +12,8 @@ angular.module('compassgdaApp')
             ];
         $scope.isForward = true;
         $scope.isBack = false;
+        $scope.isDown = true;
+        $scope.isUp = false;
         $scope.template = templates[0];
         $scope.venuesSections = {};
         $scope.currentSection = 'topPicks';
@@ -22,14 +24,14 @@ angular.module('compassgdaApp')
             },
             function success (res) {
                 categoriesService.setCategories(res.response.categories)
-                getVenues();
+                getVenues($scope.currentSection, 0);
             });
         }
 
         getCategories();
 
         var getVenues = function (section, offset) {
-            var newSection = section || $scope.currentSection;
+            var newSection = section;
             foursquareService.query({
                     ll: '54.3520252,18.6466384',
                     v: date,
@@ -42,17 +44,17 @@ angular.module('compassgdaApp')
                     if (res.numResults !== '0') {
                         $scope.venuesSections[newSection] =  {
                             venues: venuesService.decorateVenues(res.response.groups[0].items, newSection),
-                            current: false,
+                            current: offset !== 0,
                             name: newSection,
-                            currentVenueIndex: 0
+                            currentVenueIndex: 0,
+                            offset: offset + 10
                         }
-                        if (currentOffset === 0) {
+                        if (offset === 0) {
                             $scope.venuesSections[newSection].venues[0].current = true;
                             preloadImage($scope.venuesSections[newSection].venues[1].photo.url);
                         }
-                        currentOffset = currentOffset + currentLimit;
                         if (Object.keys($scope.venuesSections).length === 1) {
-                            getVenues(categoriesService.getSectionApiName($scope.venuesSections[newSection].venues[0].category.sectionName), 0);
+                            getVenues($scope.venuesSections[newSection].venues[0].category.sectionName, 0);
                             $scope.venuesSections[newSection].current = true;
                         }
                     }
@@ -61,26 +63,32 @@ angular.module('compassgdaApp')
         }
 
         $scope.getNextVenue = function (sectionName, index) {
-            $scope.isBack = false;
-            $scope.isForward = true;
-            $scope.venuesSections[sectionName].venues[index].current = false;
             if ($scope.venuesSections[sectionName].venues[index + 1]) {
+                $scope.isBack = false;
+                $scope.isForward = true;
+                $scope.venuesSections[sectionName].venues[index].current = false;
+
                 $scope.venuesSections[sectionName].venues[index + 1].current = true;
+
+                if ($scope.venuesSections[sectionName].venues[index + 2]) {
+                    preloadImage($scope.venuesSections[sectionName].venues[index + 2].photo.url);
+                } else {
+                    getVenues(sectionName, $scope.venuesSections[sectionName].offset);
+                }
+                $scope.venuesSections[sectionName].currentVenueIndex = index + 1;
             }
-            if ($scope.venuesSections[sectionName].venues[index + 2]) {
-                preloadImage($scope.venuesSections[sectionName].venues[index + 2].photo.url);
-            }
-            $scope.venuesSections[sectionName].currentVenueIndex = index + 1;
         }
 
         $scope.getPrevVenue = function (sectionName, index) {
-            $scope.isBack = true;
-            $scope.isForward = false;
-            $scope.venuesSections[sectionName].venues[index].current = false;
             if ($scope.venuesSections[sectionName].venues[index - 1]) {
+                $scope.isBack = true;
+                $scope.isForward = false;
+                $scope.venuesSections[sectionName].venues[index].current = false;
+
                 $scope.venuesSections[sectionName].venues[index - 1].current = true;
+
+                $scope.venuesSections[sectionName].currentVenueIndex = index - 1;
             }
-            $scope.venuesSections[sectionName].currentVenueIndex = index - 1;
         }
 
         angular.element(document).bind("keyup", function(event) {
@@ -104,23 +112,35 @@ angular.module('compassgdaApp')
         });
 
         $scope.getNextSection = function (index) {
-            if (!getCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index + 1]])) {
-                setCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index + 1]].venues, 0);
+            if (Object.keys($scope.venuesSections)[index + 1]) {
+                if (!getCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index + 1]])) {
+                    setCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index + 1]].venues, 0);
+                }
+                if (getCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index + 1]]).id === getCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index]]).id) {
+                    setCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index + 1]].venues, 1);
+                }
+                $scope.isDown = true;
+                $scope.isUp = false;
+                $scope.venuesSections[Object.keys($scope.venuesSections)[index]].current = false;
+                $scope.venuesSections[Object.keys($scope.venuesSections)[index + 1]].current = true;
+                currentSectionIndex = currentSectionIndex + 1;
+                $scope.currentSection = Object.keys($scope.venuesSections)[index + 1];
+                getNextCategoryVenues();
             }
-            $scope.venuesSections[Object.keys($scope.venuesSections)[index]].current = false;
-            $scope.venuesSections[Object.keys($scope.venuesSections)[index + 1]].current = true;
-            currentSectionIndex = currentSectionIndex + 1;
-            $scope.currentSection = Object.keys($scope.venuesSections)[index + 1];
         }
 
         $scope.getPrevSection = function (index) {
-            if (!getCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index - 1]])) {
-                setCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index - 1]].venues, 0);
+            if (Object.keys($scope.venuesSections)[index - 1]) {
+                if (!getCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index - 1]])) {
+                    setCurrentVenue($scope.venuesSections[Object.keys($scope.venuesSections)[index - 1]].venues, 0);
+                }
+                $scope.isDown = false;
+                $scope.isUp = true;
+                $scope.venuesSections[Object.keys($scope.venuesSections)[index]].current = false;
+                $scope.venuesSections[Object.keys($scope.venuesSections)[index - 1]].current = true;
+                currentSectionIndex = currentSectionIndex - 1;
+                $scope.currentSection = Object.keys($scope.venuesSections)[index - 1];
             }
-            $scope.venuesSections[Object.keys($scope.venuesSections)[index]].current = false;
-            $scope.venuesSections[Object.keys($scope.venuesSections)[index - 1]].current = true;
-            currentSectionIndex = currentSectionIndex - 1;
-            $scope.currentSection = Object.keys($scope.venuesSections)[index - 1];
         }
 
         function preloadImage (url) {
@@ -130,9 +150,9 @@ angular.module('compassgdaApp')
 
         function getCurrentVenue (venues) {
             var currentVenue = false;
-            angular.forEach(venues, function(venue){
+            angular.forEach(venues.venues, function(venue){
                 if (venue.current) {
-                    curentVenue = venue;
+                    currentVenue = venue;
                 }
             });
 
@@ -144,6 +164,14 @@ angular.module('compassgdaApp')
                 venues[index].current = true;
             } else {
                 venues[0].current = true;
+            }
+        }
+
+        function getNextCategoryVenues () {
+            if (!$scope.venuesSections[$scope.venuesSections['topPicks'].venues[0].category.sectionName]) {
+                getVenues($scope.venuesSections['topPicks'].venues[0].category.sectionName);
+            } else if (venuesService.getNextEmptySection()) {
+                getVenues(venuesService.getNextEmptySection(), 0);
             }
         }
     });

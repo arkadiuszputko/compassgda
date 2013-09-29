@@ -12,6 +12,20 @@ angular.module('venues', []).
         }
 
         return {
+            getVenues: function () {
+                return venues;
+            },
+            getNextEmptySection: function () {
+                var sections = categoriesService.getSections(),
+                    sectionName = false;
+                angular.forEach(sections, function(section){
+                    if (!venues[section] || !venues[section].length) {
+                        sectionName = section;
+                        return sectionName;
+                    }
+                });
+                return sectionName;
+            },
             decorateVenues: function (items, section) {
                 if (!venues[section]) {
                     venues[section] = [];
