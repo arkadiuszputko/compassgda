@@ -1,5 +1,5 @@
 angular.module('categories', []).
-    factory('categoriesService', function(photoService) {
+    factory('categoriesService', function() {
 
         var categories = {},
             sections = {
@@ -30,9 +30,11 @@ angular.module('categories', []).
                     secName = false;
                 if (section.subCatName) {
                     secName = getSectionNameByCategory(section.subCatName);
-                } else if (section.catName) {
+                }
+                if (section.catName && !secName) {
                     secName = getSectionNameByCategory(section.catName);
-                } else if (section.secName) {
+                }
+                if (section.secName && !secName) {
                     secName = getSectionNameByCategory(section.secName);
                 }
                 return secName || sec;
@@ -47,6 +49,13 @@ angular.module('categories', []).
                     return sectionName.split(/\s/)[0].toLowerCase();
                 }
                 return sectionName.replace(/\s&\s+/g, '-').toLowerCase();
+            },
+            getSections: function () {
+                var sectionsToReturn = [];
+                for (sectionName in sections) {
+                    sectionsToReturn.push(sectionName);
+                }
+                return sectionsToReturn;
             },
             getSection: function (categoryId) {
                 var section = false;
