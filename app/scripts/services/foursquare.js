@@ -1,5 +1,5 @@
-angular.module('foursquareAPI', ['ngResource']).
-    factory('foursquareService', function($resource, FOURSQUARE_API_ADDRESS, FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET){
+angular.module('foursquareAPI', ['ngResource'])
+    .factory('foursquareService', function($resource, FOURSQUARE_API_ADDRESS, FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET){
         return $resource(
             FOURSQUARE_API_ADDRESS + 'venues/explore?' + 'll=:ll&client_id=' + FOURSQUARE_CLIENT_ID + '&client_secret=' + FOURSQUARE_CLIENT_SECRET + '&venuePhotos=1&v=:v&locale=:locale&limit=:limit&section=:section&offset=:offset',
             {},
