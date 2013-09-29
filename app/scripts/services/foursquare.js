@@ -36,4 +36,19 @@ angular.module('foursquareAPI', ['ngResource']).
                 }
             }
         )
+    })
+    .factory('foursquareCategoriesService', function($resource, FOURSQUARE_API_ADDRESS, FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET){
+        return $resource(
+            FOURSQUARE_API_ADDRESS + 'venues/categories?client_id=' + FOURSQUARE_CLIENT_ID + '&client_secret=' + FOURSQUARE_CLIENT_SECRET + '&v=:v',
+            {},
+            {
+                query: {
+                    method: 'GET',
+                    params: {
+                        v: 'date',
+                    },
+                    isArray: false
+                }
+            }
+        )
     });
