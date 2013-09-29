@@ -4,10 +4,22 @@ angular.module('venues', []).
         var venues = {};
 
         var getTemplateUrl = function (item) {
-            if (item.venue.photos.groups.length && item.venue.photos.groups[0].items[0].height > 620) {
+            /*if (item.venue.photos.groups.length && item.venue.photos.groups[0].items[0].height > 620) {
                 return 'views/bigPhoto.html';
             } else {
                 return 'views/smallPhoto.html';
+            }*/
+            return 'views/category.html';
+        }
+
+        var getStaticMap = function(obj){
+            var base = 'https://maps.googleapis.com/maps/api/staticmap?';
+            if(obj.lat && obj.lng){
+                return base + 'center=' + obj.lat + ',' + obj.lng + '&zoom=15&size=400x400&sensor=false';
+            }else if(obj.city && obj.address){
+                return base + 'center=' + encodeURIComponent(obj.city) + ',' + encodeURIComponent(obj.address) + '&zoom=15&size=400x400&sensor=false'
+            }else{
+                return null;
             }
         }
 
@@ -53,6 +65,12 @@ angular.module('venues', []).
                             categoryParentId: categoriesService.getSection(item.venue.categories[0].id).id,
                             categoryParentName: categoriesService.getSection(item.venue.categories[0].id).name,
                             sectionName: categoriesService.getSection(item.venue.categories[0].id).sectionName
+                        },
+                        location: {
+                            url: getStaticMap(item.venue.location),
+                            address: item.venue.location.address,
+                            city: item.venue.location.city,
+                            postalCode: item.venue.location.postalCode
                         }
                     };
                     venues[section].push(venue);

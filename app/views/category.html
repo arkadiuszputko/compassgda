@@ -1,0 +1,29 @@
+<div class="tpl category">
+    <section class="cover-image" style="background-image: url('{{venue.photo.url}}')">
+        <div class="category-name">
+            <header>
+                <h1>{{venue.category.sectionName}}</h1>
+                <h3>in Gdańsk</h3>
+            </header>
+        </div>
+    </section>
+    <section class="top-pick-venue">
+        <header>
+            <div class="badge">
+                <div></div>
+            </div>
+        </header>
+        <h2>{{venue.name}}</h2>
+        <p class="tip">{{venue.tip.text}}</p>
+        <div class="location-map" style="background-image: url('{{venue.location.url}}')">
+            <div class="location-details">
+                <div>
+                    <div>
+                        <p>{{venue.location.address}}</p>
+                        <p>{{venue.location.postalCode}} {{venue.location.city}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
