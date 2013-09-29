@@ -7,6 +7,7 @@ angular.module('compassgdaApp')
             currentLimit = 10,
             currentSectionIndex = 0,
             templates = [
+                { name: 'category', url: 'views/category.html'},
                 { name: 'bigPhoto', url: 'views/bigPhoto.html'},
                 { name: 'smallPhoto', url: 'views/smallPhoto.html'}
             ];
