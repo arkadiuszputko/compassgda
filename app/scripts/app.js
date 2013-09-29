@@ -4,6 +4,10 @@ angular.module('compassgdaApp', ['ngRoute', 'ngAnimate', 'foursquareAPI', 'photo
     .config(function ($routeProvider) {
     $routeProvider
         .when('/', {
+            templateUrl: 'views/intro.html',
+            controller: 'IntroCtrl'
+        })
+        .when('/board', {
             templateUrl: 'views/main.html',
             controller: 'MainCtrl'
         })
