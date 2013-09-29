@@ -4,7 +4,7 @@ angular.module('venues', []).
         var venues = {};
 
         var getTemplateUrl = function (item) {
-            if (item.venue.photos.groups[0].items[0].height > 620) {
+            if (item.venue.photos.groups.length && item.venue.photos.groups[0].items[0].height > 620) {
                 return 'views/bigPhoto.html';
             } else {
                 return 'views/smallPhoto.html';
@@ -21,13 +21,13 @@ angular.module('venues', []).
                         id: item.venue.id,
                         name: item.venue.name,
                         photo: {
-                            url: photoService.getImageUrl(item.venue.photos.groups[0].items[0]),
-                            width: item.venue.photos.groups[0].items[0].width,
-                            height: item.venue.photos.groups[0].items[0].height
+                            url: item.venue.photos.groups.length ? photoService.getImageUrl(item.venue.photos.groups[0].items[0]) : '',
+                            width: item.venue.photos.groups.length ? item.venue.photos.groups[0].items[0].width : 0,
+                            height: item.venue.photos.groups.length ? item.venue.photos.groups[0].items[0].height : 0
                         },
                         tip: {
-                            userId: item.tips[0].user.id || '',
-                            text: item.tips[0].text || 'Sorry this venue doesn\'t have any tip but We are sure that this is a great place'
+                            userId: item.tips ? item.tips[0].user.id : '',
+                            text: item.tips ? item.tips[0].text : 'Sorry this venue doesn\'t have any tip but We are sure that this is a great place'
                         },
                         rating: item.rating || 0,
                         template: {
@@ -36,8 +36,9 @@ angular.module('venues', []).
                         category: {
                             id: item.venue.categories[0].id,
                             name: item.venue.categories[0].name,
-                            sectionId: categoriesService.getSection(item.venue.categories[0].id).id,
-                            sectionName: categoriesService.getSection(item.venue.categories[0].id).name
+                            categoryParentId: categoriesService.getSection(item.venue.categories[0].id).id,
+                            categoryParentName: categoriesService.getSection(item.venue.categories[0].id).name,
+                            sectionName: categoriesService.getSection(item.venue.categories[0].id).sectionName
                         }
                     };
                     venues[section].push(venue);

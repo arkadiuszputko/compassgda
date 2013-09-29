@@ -4,8 +4,7 @@ angular.module('compassgdaApp')
     .controller('MainCtrl', function ($scope, $rootScope, $location, foursquareService, foursquareCategoriesService, categoriesService, venuesService) {
         var date = moment().format('YYYYMMDD'),
             currentOffset = 0,
-            currentLimit = 10,
-            currentVenueIndex = 0,
+            currentLimit = 50,
             currentSectionIndex = 0,
             templates = [
                 { name: 'bigPhoto', url: 'views/bigPhoto.html'},
@@ -40,55 +39,58 @@ angular.module('compassgdaApp')
                     offset: offset === 0 ? offset : offset || currentOffset
                 },
                 function success (res) {
-                    $scope.venuesSections[newSection] =  {
-                        venues: venuesService.decorateVenues(res.response.groups[0].items, newSection),
-                        current: false,
-                        name: newSection
-                    }
-                    if (currentOffset === 0) {
-                        $scope.venuesSections[newSection].venues[0].current = true;
-                        preloadImage($scope.venuesSections[newSection].venues[1].photo.url);
-                    }
-                    currentOffset = currentOffset + currentLimit;
-                    if (Object.keys($scope.venuesSections).length === 1) {
-                        getVenues('food', 0);
-                        $scope.venuesSections[newSection].current = true;
+                    if (res.numResults !== '0') {
+                        $scope.venuesSections[newSection] =  {
+                            venues: venuesService.decorateVenues(res.response.groups[0].items, newSection),
+                            current: false,
+                            name: newSection,
+                            currentVenueIndex: 0
+                        }
+                        if (currentOffset === 0) {
+                            $scope.venuesSections[newSection].venues[0].current = true;
+                            preloadImage($scope.venuesSections[newSection].venues[1].photo.url);
+                        }
+                        currentOffset = currentOffset + currentLimit;
+                        if (Object.keys($scope.venuesSections).length === 1) {
+                            getVenues(categoriesService.getSectionApiName($scope.venuesSections[newSection].venues[0].category.sectionName), 0);
+                            $scope.venuesSections[newSection].current = true;
+                        }
                     }
                 }
             );
         }
 
-        $scope.getNextVenue = function (venues, index) {
+        $scope.getNextVenue = function (sectionName, index) {
             $scope.isBack = false;
             $scope.isForward = true;
-            venues[index].current = false;
-            if (venues[index + 1]) {
-                venues[index + 1].current = true;
+            $scope.venuesSections[sectionName].venues[index].current = false;
+            if ($scope.venuesSections[sectionName].venues[index + 1]) {
+                $scope.venuesSections[sectionName].venues[index + 1].current = true;
             }
-            if (venues[index + 2]) {
-                preloadImage(venues[index + 2].photo.url);
+            if ($scope.venuesSections[sectionName].venues[index + 2]) {
+                preloadImage($scope.venuesSections[sectionName].venues[index + 2].photo.url);
             }
-            currentVenueIndex = index + 1;
+            $scope.venuesSections[sectionName].currentVenueIndex = index + 1;
         }
 
-        $scope.getPrevVenue = function (venues, index) {
+        $scope.getPrevVenue = function (sectionName, index) {
             $scope.isBack = true;
             $scope.isForward = false;
-            venues[index].current = false;
-            if (venues[index - 1]) {
-                venues[index - 1].current = true;
+            $scope.venuesSections[sectionName].venues[index].current = false;
+            if ($scope.venuesSections[sectionName].venues[index - 1]) {
+                $scope.venuesSections[sectionName].venues[index - 1].current = true;
             }
-            currentVenueIndex = index - 1;
+            $scope.venuesSections[sectionName].currentVenueIndex = index - 1;
         }
 
         angular.element(document).bind("keyup", function(event) {
             if (event.which === 37) {
                 $scope.$apply(function () {
-                    $scope.getPrevVenue($scope.venuesSections[$scope.currentSection].venues, currentVenueIndex);
+                    $scope.getPrevVenue($scope.currentSection, $scope.venuesSections[$scope.currentSection].currentVenueIndex);
                 });
             } else if (event.which === 39) {
                 $scope.$apply(function () {
-                    $scope.getNextVenue($scope.venuesSections[$scope.currentSection].venues, currentVenueIndex);
+                    $scope.getNextVenue($scope.currentSection, $scope.venuesSections[$scope.currentSection].currentVenueIndex);
                 });
             } else if (event.which === 40) {
                 $scope.$apply(function () {
