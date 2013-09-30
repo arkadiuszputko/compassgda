@@ -133,7 +133,7 @@ ul {
 			}
 
 			.tip {
-				font-family: $sans;
+				font-family: $marck;
 				font-size: 1.3em;
 				font-weight: 100;
 				margin: 0;
@@ -142,15 +142,26 @@ ul {
 	}
 
     &.category {
-        .cover-image {
+
+        aside {
             position: absolute;
             top: 0;
             left: 0;
             width: 60%;
             height: 100%;
+            background: #000;
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
             background-repeat: none;
             background-position: center center;
             background-size: cover;
+            @include filter(contrast(150%));
         }
 
         .top-pick-venue {
@@ -162,6 +173,75 @@ ul {
             @extend .light-bg;
             @include box-sizing();
             padding: 30px;
+
+            h2 {
+                text-align: center;
+                font-size: 5em;
+                color: $dark;
+                font-weight: bold;
+                font-family: $amatic;
+                margin: 10px 0;
+            }
+
+            .tip {
+                color: $gray;
+                font-size: 1.8em;
+                font-weight: 100;
+                text-align: center;
+                display: block;
+                margin: 0 20px;
+                font-family: $marck;
+            }
+
+            &.magazine {
+                h2 {
+                    font-size: 5em;
+                    font-family: $niconne;
+                }
+
+                .tip {
+                    font-size: 1.8em;
+                    font-family: $gudea;
+                }
+            }
+
+            &.common {
+                h2 {
+                    font-size: 5em;
+                    font-family: $marck;
+                }
+
+                .tip {
+                    font-size: 1.8em;
+                    font-family: $oregano;
+                }
+            }
+
+            &.fancy {
+                h2 {
+                    font-size: 5em;
+                    font-family: $bebas;
+                }
+
+                .tip {
+                    font-size: 2em;
+                    font-family: $garamond;
+                }
+            }
+
+            &.fashion {
+                h2 {
+                    font-size: 4em;
+                    font-family: $englebert;
+                    line-height: 1;
+                    margin-top: 20px;
+                }
+
+                .tip {
+                    font-size: 1.8em;
+                    font-family: $shadows;
+                }
+            }
 
             .location-map {
                 position: absolute;
@@ -218,7 +298,7 @@ ul {
 
             header {
                 position: relative;
-                height: 60px;
+                height: 40px;
 
                 &:after {
                     content: "";
@@ -234,8 +314,8 @@ ul {
                 .badge {
                     @include border-radius(50%);
                     background: #fff;
-                    width: 60px;
-                    height: 60px;
+                    width: 40px;
+                    height: 40px;
                     border: 1px solid $dark;
                     margin: 0 auto;
                     position: relative;
@@ -243,8 +323,8 @@ ul {
 
                     > div {
                         @include border-radius(50%);
-                        width: 52px;
-                        height: 52px;
+                        width: 32px;
+                        height: 32px;
                         background-color: $dark;
                         position: relative;
                         top: 4px;
@@ -253,24 +333,7 @@ ul {
                 }
             }
 
-            h2 {
-                text-align: center;
-                font-size: 5em;
-                color: $dark;
-                font-weight: bold;
-                font-family: $amatic;
-                margin: 10px 0;
-            }
 
-            .tip {
-                color: $gray;
-                font-size: 1.8em;
-                font-weight: 100;
-                text-align: justify;
-                display: block;
-                margin: 0 20px;
-                font-family: $source;
-            }
         }
 
         .category-name {
@@ -420,6 +483,25 @@ body {
                 left: 100%;
             }
         }
+    }
+}
+.rating {
+    width: 185px;
+    height: 16px;
+    display: block;
+    background: url(../images/star-rating.png) center center no-repeat;
+    background-size: 185px auto;
+    background-position: 0 0;
+    position: relative;
+    margin: 5px auto 10px auto;
+
+    span {
+        background: url(../images/star-rating.png) center center no-repeat;
+        background-size: 185px auto;
+        background-position: 0 -16px;
+        position: absolute;
+        width: auto;
+        height: 100%;
     }
 }
 

@@ -1,19 +1,25 @@
 <div class="tpl category">
-    <section class="cover-image" style="background-image: url('{{venue.photo.url}}')">
+    <aside>
+        <section class="cover-image" style="background-image: url('{{venue.photo.url}}')">
+        </section>
         <div class="category-name">
             <header>
                 <h1>{{venue.category.sectionName}}</h1>
-                <h3>in Gdańsk</h3>
+                <h3>in {{venue.location.city}}</h3>
             </header>
         </div>
-    </section>
-    <section class="top-pick-venue">
+    </aside>
+
+    <section class="top-pick-venue {{venue.styling.fontStyling}}">
         <header>
             <div class="badge">
                 <div></div>
             </div>
         </header>
         <h2>{{venue.name}}</h2>
+        <span class="rating" ng-if="venue.rating">
+            <span style="width: {{venue.rating}};"></span>
+        </span>
         <p class="tip">{{venue.tip.text}}</p>
         <div class="location-map" style="background-image: url('{{venue.location.url}}')">
             <div class="location-details">
