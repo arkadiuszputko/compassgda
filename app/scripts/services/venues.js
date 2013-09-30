@@ -2,6 +2,13 @@ angular.module('venues', []).
     factory('venuesService', function(photoService, categoriesService) {
 
         var venues = {};
+            fontStylings = [
+                'stylish',
+                'common',
+                'fancy',
+                'fashion',
+                'magazine'
+            ];
 
         var getTemplateUrl = function (item) {
             /*if (item.venue.photos.groups.length && item.venue.photos.groups[0].items[0].height > 620) {
@@ -21,6 +28,13 @@ angular.module('venues', []).
             }else{
                 return null;
             }
+        }
+
+        var getFontStyling = function(){
+            var stylesLength = fontStylings.length - 1,
+                index = parseInt(stylesLength * Math.random(), 10);
+
+            return fontStylings[index];
         }
 
         return {
@@ -71,7 +85,11 @@ angular.module('venues', []).
                             address: item.venue.location.address,
                             city: item.venue.location.city,
                             postalCode: item.venue.location.postalCode
-                        }
+                        },
+                        styling: {
+                            fontStyling: getFontStyling()
+                        },
+                        rating: (item.venue.rating) ? item.venue.rating*10 + '%' : null
                     };
                     venues[section].push(venue);
                 });

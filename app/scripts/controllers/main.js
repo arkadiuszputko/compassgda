@@ -34,7 +34,7 @@ angular.module('compassgdaApp')
         var getVenues = function (section, offset) {
             var newSection = section;
             foursquareService.query({
-                    ll: '54.3520252,18.6466384',
+                    ll: '52.519171,13.406091',
                     v: date,
                     locale: 'en',
                     section: section || $scope.currentSection,
