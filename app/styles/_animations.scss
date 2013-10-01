@@ -1,0 +1,31 @@
+@keyframes introTransitioning
+{
+    0%   {
+        @include filter(contrast(150%) blur(3px) grayscale(100%));
+
+    }
+
+    50%  {
+        @include filter(contrast(150%) blur(0) grayscale(0));
+    }
+
+    100% {
+        @include filter(contrast(150%) blur(3px) grayscale(100%));
+    }
+}
+
+@-webkit-keyframes introTransitioning
+{
+    0%   {
+        @include filter(contrast(150%) blur(3px) grayscale(100%));
+
+    }
+
+    50%  {
+        @include filter(contrast(150%) blur(0) grayscale(0));
+    }
+
+    100% {
+        @include filter(contrast(150%) blur(3px) grayscale(100%));
+    }
+}
