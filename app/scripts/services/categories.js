@@ -44,9 +44,11 @@ angular.module('categories', []).
             setCategories: function (cat) {
                 categories = cat;
             },
-            getSectionApiName: function (sectionName) {
+            getCategoryApiName: function (sectionName) {
                 if (sectionName === 'Nightlife Spot' || sectionName === 'Shop & Service') {
                     return sectionName.split(/\s/)[0].toLowerCase();
+                } else if (sectionName === 'Professional & Other Places') {
+                    return 'professional';
                 }
                 return sectionName.replace(/\s&\s+/g, '-').toLowerCase();
             },
@@ -57,6 +59,15 @@ angular.module('categories', []).
                 }
                 return sectionsToReturn;
             },
+            getCategoriesIds: function () {
+                var categoriesIds = [];
+                angular.forEach(categories, function(cat){
+                    if (cat.id !== '4d4b7105d754a06372d81259' && cat.id !== '4d4b7105d754a06375d81259' && cat.id !== '4e67e38e036454776db1fb3a') {
+                        categoriesIds.push(cat.id);
+                    }
+                });
+                return categoriesIds;
+            },
             getSection: function (categoryId) {
                 var section = false;
                 angular.forEach(categories, function(sec){
@@ -64,7 +75,7 @@ angular.module('categories', []).
                         section = {
                             name: sec.name,
                             id: sec.id,
-                            sectionName: getSectionName({secName: sec.name, catName: '', subcatName: ''})
+                            sectionName: sec.name
                         }
                         return section;
                     }
@@ -73,7 +84,7 @@ angular.module('categories', []).
                             section = {
                                 name: sec.name,
                                 id: sec.id,
-                                sectionName: getSectionName({secName: sec.name, catName: cat.name, subcatName: ''})
+                                sectionName: sec.name
                             }
                             return section;
                         }
@@ -83,7 +94,7 @@ angular.module('categories', []).
                                     section = {
                                         name: sec.name,
                                         id: sec.id,
-                                        sectionName: getSectionName({secName: sec.name, catName: cat.name, subcatName: subcat.name})
+                                        sectionName: sec.name
                                     }
                                     return section;
                                 }
