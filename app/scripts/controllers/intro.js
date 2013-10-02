@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compassgdaApp')
-    .controller('IntroCtrl', function ($scope, foursquareService, venuesService, geolocationService, gmapsLatLngService) {
+    .controller('IntroCtrl', function ($scope, $location, foursquareService, venuesService, geolocationService, gmapsLatLngService, gmapsCityService) {
         var date = moment().format('YYYYMMDD');
         $scope.geo = {
             isCity : false,
@@ -18,7 +18,7 @@ angular.module('compassgdaApp')
                     offset: 0
                 },
                 function success (res) {
-                    var picked = venuesService.decorateVenues(res.response.groups[0].items, 'topPicks');
+                    var picked = venuesService.decorateVenues(res.response.groups[0].items, 'topPicks', false);
                     $scope.topPickPhoto = [];
                     angular.forEach(picked, function(item, index){
                         $scope.topPickPhoto.push({
@@ -41,7 +41,7 @@ angular.module('compassgdaApp')
                     function(response){
                         var res = response.results;
                         if(res.length) {
-                            geolocationService.setAddress(res[0].formatted_address)
+                            geolocationService.setAddress(getCityNameFromResponse(res));
                             getVenues(geolocationService.getPosition().ll);
                             displayCity(geolocationService.getAddress());
                         }
@@ -59,10 +59,37 @@ angular.module('compassgdaApp')
         );
 
         var displayCity = function(cityName) {
-            //res = res.results;
-            //if(res.length) {
-                $scope.geo.cityName = cityName;
-                $scope.geo.isCity = true;
-            //}
+            $scope.geo.cityName = cityName;
+            $scope.geo.isCity = true;
+        }
+
+        $scope.onSubmit = function(e) {
+            e.preventDefault();
+            var city = this.city.trim();
+            if(city != '') {
+                gmapsCityService.query({
+                        address: city,
+                        language: 'pl',
+                        sensor: false
+                    },
+                    function success(response) {
+                        geolocationService.setPosition(response.results[0].geometry.location.lat, response.results[0].geometry.location.lng);
+                        geolocationService.setAddress(getCityNameFromResponse(response.results));
+                        $location.path('board');
+                    }
+                )
+            }
+        }
+
+        var getCityNameFromResponse = function(res) {
+            var cityName = null;
+            for (var i = 0; i < res[0].address_components.length; i++) {
+                for (var j = 0; j < res[0].address_components[i].types.length; j++) {
+                    if(res[0].address_components[i].types[j] == 'locality') {
+                        cityName = res[0].address_components[i].long_name;
+                    }
+                }
+            }
+            return cityName;
         }
     });

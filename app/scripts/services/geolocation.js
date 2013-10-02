@@ -35,10 +35,11 @@ angular.module('geoAPI', ['ngResource'])
             }
         );
     })
-    .factory('geolocationService', function() {
+    .factory('geolocationService', function(storeData) {
         var latitude = 0,
             longitude = 0,
-            stringifiedParams = '';
+            stringifiedParams = null,
+            address = null;
         return {
 
             getUserPosition: function(success, error, noGeolocationCallback) {
@@ -53,6 +54,9 @@ angular.module('geoAPI', ['ngResource'])
                 latitude = lat || 0;
                 longitude = lng || 0;
                 stringifiedParams = lat + ',' + lng;
+                storeData.set('lat', latitude);
+                storeData.set('lng', longitude);
+                storeData.set('ll', stringifiedParams);
             },
 
             getPosition: function() {
@@ -65,10 +69,15 @@ angular.module('geoAPI', ['ngResource'])
 
             setAddress: function(addr) {
                 address = addr || '';
+                storeData.set('city', address);
             },
 
             getAddress: function() {
                 return address;
+            },
+
+            isPositionSet: function(){
+                return !!(latitude && longitude && stringifiedParams && address);
             }
 
         }

@@ -1,5 +1,5 @@
 angular.module('venues', []).
-    factory('venuesService', function(photoService, categoriesService) {
+    factory('venuesService', function(photoService, categoriesService, geolocationService) {
 
         var venues = {};
             fontStylings = [
@@ -23,8 +23,6 @@ angular.module('venues', []).
             var base = 'https://maps.googleapis.com/maps/api/staticmap?';
             if(obj.lat && obj.lng){
                 return base + 'center=' + obj.lat + ',' + obj.lng + '&zoom=15&size=400x400&sensor=false';
-            }else if(obj.city && obj.address){
-                return base + 'center=' + encodeURIComponent(obj.city) + ',' + encodeURIComponent(obj.address) + '&zoom=15&size=400x400&sensor=false'
             }else{
                 return null;
             }
@@ -52,10 +50,18 @@ angular.module('venues', []).
                 });
                 return sectionName;
             },
-            decorateVenues: function (items, section) {
-                if (!venues[section]) {
-                    venues[section] = [];
-                }
+
+            /**
+             * retrieves the most valuable information
+             * from given array
+             * @param  {Array} items    [array of objects]
+             * @param  {String} section [name of section to save array into]
+             * @param  {[Boolean} save  [indicates if array should be saved to venues, default: true]
+             * @return {Array}          [array of objects]
+             */
+            decorateVenues: function (items, section, save) {
+                save = (save === undefined) ? true : save;
+                var venueCollection = [];
                 angular.forEach(items, function(item, index){
                     var venue = {
                         id: item.venue.id,
@@ -82,7 +88,7 @@ angular.module('venues', []).
                         location: {
                             url: getStaticMap(item.venue.location),
                             address: item.venue.location.address,
-                            city: item.venue.location.city,
+                            city: item.venue.location.city || geolocationService.getAddress(),
                             postalCode: item.venue.location.postalCode
                         },
                         styling: {
@@ -93,10 +99,15 @@ angular.module('venues', []).
                             percentage: (item.venue.rating) ? item.venue.rating * 10 + '%' : null
                         }
                     };
-                    venues[section].push(venue);
+                    venueCollection.push(venue);
+
                 });
 
-                return venues[section];
+                if (!venues[section] && save) {
+                    venues[section] = venueCollection;
+                }
+
+                return venueCollection;
             },
         }
     });

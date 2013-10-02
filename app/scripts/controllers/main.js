@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compassgdaApp')
-    .controller('MainCtrl', function ($scope, $rootScope, $location, foursquareService, foursquareCategoriesService, categoriesService, venuesService, geolocationService) {
+    .controller('MainCtrl', function ($scope, $rootScope, $location, foursquareService, foursquareCategoriesService, categoriesService, venuesService, geolocationService, storeData) {
         var date = moment().format('YYYYMMDD'),
             currentOffset = 0,
             currentLimit = 10,
@@ -28,6 +28,17 @@ angular.module('compassgdaApp')
             $scope.nav.button = !$scope.nav.button;
         }
 
+        var checkIfLocationAvailable = function(){
+            if(!geolocationService.isPositionSet()) {
+                if(storeData.exists('lat') && storeData.exists('lng') && storeData.exists('city')) {
+                    geolocationService.setPosition(parseInt(storeData.get('lat'), 10), parseInt(storeData.get('lng'), 10));
+                    geolocationService.setAddress(storeData.get('city'));
+                }
+            }
+        }
+
+        checkIfLocationAvailable();
+
         var getCategories = function () {
             foursquareCategoriesService.query({
                 v: date
@@ -43,7 +54,7 @@ angular.module('compassgdaApp')
         var getVenues = function (section, offset) {
             var newSection = section;
             foursquareService.query({
-                    ll: geolocationService.getPosition().ll || '52.519171,13.406091',
+                    ll: geolocationService.getPosition().ll,
                     v: date,
                     locale: 'en',
                     section: section || $scope.currentSection,

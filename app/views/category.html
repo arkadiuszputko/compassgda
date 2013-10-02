@@ -21,7 +21,7 @@
             <span style="width: {{venue.rating.percentage}};"></span>
         </span>
         <p class="tip">{{venue.tip.text}}</p>
-        <div class="location-map" style="background-image: url('{{venue.location.url}}')">
+        <div class="location-map" ng-if="venue.location.url" style="background-image: url('{{venue.location.url}}')">
             <div class="location-details">
                 <div>
                     <div>
