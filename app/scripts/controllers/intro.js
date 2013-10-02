@@ -1,11 +1,16 @@
 'use strict';
 
 angular.module('compassgdaApp')
-    .controller('IntroCtrl', function ($scope, foursquareService, venuesService) {
+    .controller('IntroCtrl', function ($scope, foursquareService, venuesService, geolocationService, gmapsLatLngService) {
         var date = moment().format('YYYYMMDD');
-        var getVenues = function () {
+        $scope.geo = {
+            isCity : false,
+            cityName : ''
+        };
+
+        var getVenues = function (ll) {
             foursquareService.query({
-                    ll: '52.519171,13.406091',
+                    ll: ll,
                     v: date,
                     locale: 'en',
                     section: 'topPicks',
@@ -25,5 +30,39 @@ angular.module('compassgdaApp')
             );
         }
 
-        getVenues();
+        geolocationService.getUserPosition(
+            function success(position) {
+                geolocationService.setPosition(position.coords.latitude, position.coords.longitude);
+                gmapsLatLngService.query({
+                        latlng: position.coords.latitude + ',' + position.coords.longitude,
+                        language: 'pl',
+                        sensor: false
+                    },
+                    function(response){
+                        var res = response.results;
+                        if(res.length) {
+                            geolocationService.setAddress(res[0].formatted_address)
+                            getVenues(geolocationService.getPosition().ll);
+                            displayCity(geolocationService.getAddress());
+                        }
+                    }
+                );
+            },
+            function error(err) {
+                // what to do on error response, Arku? TODO
+                // that mainly happens when user click 'Deny'
+                // when asked by browser for sharing geo info
+            },
+            function noGeolocation() {
+                // what to do if there is no geolocation feature, Arku? TODO
+            }
+        );
+
+        var displayCity = function(cityName) {
+            //res = res.results;
+            //if(res.length) {
+                $scope.geo.cityName = cityName;
+                $scope.geo.isCity = true;
+            //}
+        }
     });

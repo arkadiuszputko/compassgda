@@ -69,7 +69,6 @@ angular.module('venues', []).
                             userId: item.tips ? item.tips[0].user.id : '',
                             text: item.tips ? item.tips[0].text : 'Sorry this venue doesn\'t have any tip but We are sure that this is a great place'
                         },
-                        rating: item.rating || 0,
                         template: {
                             url: getTemplateUrl(item)
                         },
@@ -89,7 +88,10 @@ angular.module('venues', []).
                         styling: {
                             fontStyling: getFontStyling()
                         },
-                        rating: (item.venue.rating) ? item.venue.rating*10 + '%' : null
+                        rating: {
+                            value : item.venue.rating || null,
+                            percentage: (item.venue.rating) ? item.venue.rating * 10 + '%' : null
+                        }
                     };
                     venues[section].push(venue);
                 });
