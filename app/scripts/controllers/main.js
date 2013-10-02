@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('compassgdaApp')
-    .controller('MainCtrl', function ($scope, $rootScope, $location, foursquareService, foursquareCategoriesService, categoriesService, venuesService) {
+    .controller('MainCtrl', function ($scope, $rootScope, $location, foursquareService, foursquareCategoriesService, categoriesService, venuesService, geolocationService) {
         var date = moment().format('YYYYMMDD'),
             currentOffset = 0,
             currentLimit = 10,
@@ -18,6 +18,15 @@ angular.module('compassgdaApp')
         $scope.template = templates[0];
         $scope.venuesSections = {};
         $scope.currentSection = 'topPicks';
+        $scope.nav = {
+            shown : false,
+            button : false
+        };
+
+        $scope.toggleNav = function(){
+            $scope.nav.shown = !$scope.nav.shown;
+            $scope.nav.button = !$scope.nav.button;
+        }
 
         var getCategories = function () {
             foursquareCategoriesService.query({
@@ -34,7 +43,7 @@ angular.module('compassgdaApp')
         var getVenues = function (section, offset) {
             var newSection = section;
             foursquareService.query({
-                    ll: '52.519171,13.406091',
+                    ll: geolocationService.getPosition().ll || '52.519171,13.406091',
                     v: date,
                     locale: 'en',
                     section: section || $scope.currentSection,

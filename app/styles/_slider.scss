@@ -485,23 +485,3 @@ body {
         }
     }
 }
-.rating {
-    width: 185px;
-    height: 16px;
-    display: block;
-    background: url(../images/star-rating.png) center center no-repeat;
-    background-size: 185px auto;
-    background-position: 0 0;
-    position: relative;
-    margin: 5px auto 10px auto;
-
-    span {
-        background: url(../images/star-rating.png) center center no-repeat;
-        background-size: 185px auto;
-        background-position: 0 -16px;
-        position: absolute;
-        width: auto;
-        height: 100%;
-    }
-}
-

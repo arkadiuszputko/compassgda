@@ -3,3 +3,7 @@
         <div ng-include="venue.template.url"></div>
     </li>
 </ul>
+<span class="show-nav" ng-class="{hidden: nav.button}" ng-click="toggleNav()">+</span>
+<nav class="main-nav" ng-class="{shown: nav.shown}">
+    <span class="close" ng-click="toggleNav()">x</span>
+</nav>
