@@ -51,4 +51,37 @@ angular.module('foursquareAPI', ['ngResource'])
                 }
             }
         )
+    })
+    .factory('foursquareVenuesSearch', function ($resource, FOURSQUARE_API_ADDRESS, FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET){
+        return $resource(
+            FOURSQUARE_API_ADDRESS + 'venues/search?client_id=' + FOURSQUARE_CLIENT_ID + '&client_secret=' + FOURSQUARE_CLIENT_SECRET + '&v=:v&categoryId=:categoryId&ll=:ll&limit=:limit',
+            {},
+            {
+                query: {
+                    method: 'GET',
+                    params: {
+                        v: 'date',
+                        categoryId: 'categoryId',
+                        ll: 'll',
+                        limit: 'limit'
+                    },
+                    isArray: false
+                }
+            }
+        )
+    })
+    .factory('foursquareVenueGet', function ($resource, FOURSQUARE_API_ADDRESS, FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET){
+        return $resource(
+            FOURSQUARE_API_ADDRESS + 'venues/:venue_id?client_id=' + FOURSQUARE_CLIENT_ID + '&client_secret=' + FOURSQUARE_CLIENT_SECRET,
+            {},
+            {
+                getOne: {
+                    method: 'GET',
+                    params: {
+                        venue_id: '@venue_id'
+                    },
+                    isArray: false
+                }
+            }
+        )
     });
