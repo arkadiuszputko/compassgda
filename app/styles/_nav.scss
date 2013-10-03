@@ -4,27 +4,67 @@ nav.main-nav {
     top: 0;
     width: 30%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 9999;
-    @include transition(all 0.1s ease-in-out);
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);
+    background: #000;
+    @include transition(all 0.4s ease-in-out);
+    -webkit-transform: translate3d(-100%, 0, 0) rotateY(-90deg);
+    transform: translate3d(-100%, 0, 0) rotateY(-90deg);
+    -webkit-transform-origin: 100% 50%;
+    transform-origin: 100% 50%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 
-    &.shown {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
+    .logo {
+        width: 50%;
+        height: 100px;
+        margin: 20px auto;
+        background: url(../images/logo-big.png) center center no-repeat;
+        background-size: contain;
     }
+}
 
-    .close {
-        display: block;
+.slides-container{
+    @include transition(all 0.4s ease-in-out);
+    z-index: 9999;
+    &:after {
+        content: "";
+        background: rgba(0,0,0,0.5) url(../images/overlay.png);
         position: absolute;
-        top: 10px;
-        right: 20px;
-        color: #fff;
-        font-size: 2em;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        @include transition(all 0.4s ease-in-out);
+    }
+}
 
-        &:hover {
-            cursor: pointer;
+.wrapper {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-perspective: 1500px;
+    perspective: 1500px;
+    -webkit-perspective-origin: 0% 50%;
+    perspective-origin: 0% 50%;
+
+
+
+
+    &.menuopen{
+
+        nav.main-nav{
+           -webkit-transform: translate3d(0, 0, 0) rotateY(0deg);
+            transform: translate3d(0, 0, 0) rotateY(0deg);
+        }
+
+
+        .slides-container {
+            -webkit-transform: translate3d(30%, 0, 0);
+            transform: translate3d(30%, 0, 0);
+            &:after {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
         }
     }
 }
@@ -32,7 +72,7 @@ nav.main-nav {
 .show-nav {
     position: absolute;
     display: block;
-    top: 50px;
+    top: 20px;
     left: 50px;
     width: 50px;
     height: 50px;
@@ -44,12 +84,13 @@ nav.main-nav {
     text-align: center;
     text-decoration: none;
     box-shadow: 0px 0px 3pt 2pt rgba(255,255,255,0.7);
-    @include transition(all 0.1s ease-in-out);
+
+    @include transition(all 0.2s ease-in-out);
 
     &.hidden {
-        opacity: 0;
-        -webkit-transform: translate3d(-50px, 0, 0);
-        transform: translate3d(-50px, 0, 0);
+        -webkit-transform: translate3d(-120px, 0, 0) rotate(45deg);
+        transform: translate3d(-120px, 0, 0) rotate(45deg);
+        box-shadow: 0px 0px 3pt 2pt rgba(255,255,255,0);
     }
 
     &:hover {

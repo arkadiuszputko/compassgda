@@ -21,3 +21,24 @@
         height: 100%;
     }
 }
+
+.badge {
+    @include border-radius(50%);
+    background: #fff;
+    width: 40px;
+    height: 40px;
+    border: 1px solid $dark;
+    margin: 0 auto;
+    position: relative;
+    z-index:2;
+
+    > div {
+        @include border-radius(50%);
+        width: 32px;
+        height: 32px;
+        background-color: $dark;
+        position: relative;
+        top: 3px;
+        left: 3px;
+    }
+}

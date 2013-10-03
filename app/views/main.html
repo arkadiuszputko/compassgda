@@ -1,9 +1,14 @@
-<ul ng-repeat="venues in venuesSections" class="venues {{venues.name}}" ng-class="{'forward': isForward, 'backward': isBack, 'up': isUp, 'down': isDown}" ng-show="venues.current">
-    <li class="venue" ng-repeat="venue in venues.venues" ng-show="venue.current" ng-click="getNextVenue(venues.name, $index)">
-        <div ng-include="venue.template.url"></div>
-    </li>
-</ul>
-<span class="show-nav" ng-class="{hidden: nav.button}" ng-click="toggleNav()">+</span>
-<nav class="main-nav" ng-class="{shown: nav.shown}">
-    <span class="close" ng-click="toggleNav()">x</span>
-</nav>
+<section class="wrapper" ng-class="{menuopen: nav.shown}">
+    <div class="slides-container">
+        <ul ng-repeat="venues in venuesSections" class="venues {{venues.name}}" ng-class="{'forward': isForward, 'backward': isBack, 'up': isUp, 'down': isDown}" ng-show="venues.current">
+            <li class="venue" ng-repeat="venue in venues.venues" ng-show="venue.current" ng-click="getNextVenue(venues.name, $index)">
+                <div ng-include="venue.template.url"></div>
+            </li>
+        </ul>
+        <span class="show-nav" ng-class="{hidden: nav.button}" ng-click="toggleNav()">+</span>
+    </div>
+    <nav class="main-nav">
+        <header class="logo"></header>
+    </nav>
+</div>
+
