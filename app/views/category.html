@@ -1,0 +1,35 @@
+<div class="tpl category">
+    <aside>
+        <section class="cover-image" style="background-image: url('{{venue.photo.url}}')">
+        </section>
+        <div class="category-name">
+            <header>
+                <h1>{{venue.category.sectionName}}</h1>
+                <h3>in {{venue.location.city}}</h3>
+            </header>
+        </div>
+    </aside>
+
+    <section class="top-pick-venue {{venue.styling.fontStyling}}">
+        <header>
+            <div class="badge">
+                <div></div>
+            </div>
+        </header>
+        <h2>{{venue.name}}</h2>
+        <span class="rating" ng-if="venue.rating">
+            <span style="width: {{venue.rating.percentage}};"></span>
+        </span>
+        <p class="tip">{{venue.tip.text}}</p>
+        <div class="location-map" ng-if="venue.location.url" style="background-image: url('{{venue.location.url}}')">
+            <div class="location-details">
+                <div>
+                    <div>
+                        <p>{{venue.location.address}}</p>
+                        <p>{{venue.location.postalCode}} {{venue.location.city}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

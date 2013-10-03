@@ -8,8 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Open+Sans:400,300,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Open+Sans:400,300,700,800|Lora|Six+Caps|Nunito:400,700|Amatic+SC:400,700|Niconne|Gudea|Marck+Script|Patrick+Hand+SC|Clicker+Script|EB+Garamond|Yanone+Kaffeesatz|Englebert|Oregano|Shadows+Into+Light+Two&subset=latin,latin-ext,cyrillic-ext,cyrillic' rel='stylesheet' type='text/css'>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css(.tmp) styles/main.css -->
@@ -27,8 +27,8 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" ng-view=""></div>
-
+    <div class="container" ng-view></div>
+    </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -44,23 +44,8 @@
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/moment/moment.js"></script>
 
-        <!-- build:js scripts/plugins.js -->
-        <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-dropdown.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-tooltip.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-modal.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-transition.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-button.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-popover.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-typeahead.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-carousel.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-scrollspy.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script>
-        <!-- endbuild -->
-
         <!-- build:js scripts/modules.js -->
+        <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5b0WXtloSfKV0CVedO4v3Hf4GidFt5rE&sensor=false"></script>-->
         <script src="bower_components/angular-resource/angular-resource.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -72,10 +57,14 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/constants.js"></script>
         <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/intro.js"></script>
         <script src="scripts/controllers/venue.js"></script>
         <script src="scripts/services/foursquare.js"></script>
         <script src="scripts/services/venues.js"></script>
         <script src="scripts/services/photo.js"></script>
+        <script src="scripts/services/categories.js"></script>
+        <script src="scripts/services/geolocation.js"></script>
+        <script src="scripts/services/storage.js"></script>
         <!-- endbuild -->
 </body>
 </html>

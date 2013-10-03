@@ -1,0 +1,10 @@
+@mixin box-sizing($type: border-box) {
+    -mox-box-sizing: $type;
+    box-sizing: $type;
+}
+
+@mixin border-radius($val){
+    -webkit-border-radius: $val;
+    -moz-border-radius: $val;
+    border-radius: $val;
+}

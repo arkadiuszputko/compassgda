@@ -1,2 +1,37 @@
+/* ***** FONTS ****** */
+
 $source: "Source Sans Pro", sans-serif;
 $sans: "Open Sans", sans-serif;
+$caslon: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+$lora: "Lora", serif;
+$sixcaps: "Six Caps", sans-serif;
+$nunito: "Nunito", sans-serif;
+$amatic: "Amatic SC", cursive;
+$bebas: "bebas_neueregular", sans-serif;
+$journal: "journalregular", serif;
+
+$niconne: "Niconne", cursive;
+$gudea: "Gudea", sans-serif;
+$marck: "Marck Script", cursive;
+$patrick: "Patrick Hand SC", cursive;
+$clicker: "Clicker Script", cursive;
+$garamond: "EB Garamond", serif;
+$yanone: "Yanone Kaffeesatz", sans-serif;
+$englebert: "Englebert", sans-serif;
+$oregano: "Oregano", cursive;
+$shadows: "Shadows Into Light Two", cursive;
+
+/* ***** RWD ***** */
+
+$max-mobile: 767px;
+$min-tablet: 768px;
+$max-tablet: 1023px;
+$desktop: 1024px;
+
+$isMobile: "only screen and (max-width: #{$max-mobile})";
+$isTablet: "only screen and (min-width: #{$min-tablet}) and (max-width: #{$max-tablet})";
+$isDesktop: "only screen and (min-width: #{$desktop})";
+
+$dark: #2e2e2e;
+$gray: #777777;
+

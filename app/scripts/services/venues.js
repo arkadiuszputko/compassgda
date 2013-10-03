@@ -1,48 +1,113 @@
 angular.module('venues', []).
-    factory('venuesService', function(photoService) {
+    factory('venuesService', function(photoService, categoriesService, geolocationService) {
 
-        var venues = [];
+        var venues = {};
+            fontStylings = [
+                'stylish',
+                'common',
+                'fancy',
+                'fashion',
+                'magazine'
+            ];
 
         var getTemplateUrl = function (item) {
-            if (item.venue.photos.groups[0].items[0].height > 620) {
+            /*if (item.venue.photos.groups.length && item.venue.photos.groups[0].items[0].height > 620) {
                 return 'views/bigPhoto.html';
             } else {
                 return 'views/smallPhoto.html';
+            }*/
+            return 'views/category.html';
+        }
+
+        var getStaticMap = function(obj){
+            var base = 'https://maps.googleapis.com/maps/api/staticmap?';
+            if(obj.lat && obj.lng){
+                return base + 'center=' + obj.lat + ',' + obj.lng + '&zoom=15&size=400x400&sensor=false';
+            }else{
+                return null;
             }
         }
 
+        var getFontStyling = function(){
+            var stylesLength = fontStylings.length - 1,
+                index = parseInt(stylesLength * Math.random(), 10);
+
+            return fontStylings[index];
+        }
+
         return {
-            decorateVenues: function (items, offset) {
-                var maxZIndex = 1000,
-                    length = items.length;
-                    console.log(offset);
+            getVenues: function () {
+                return venues;
+            },
+            getNextEmptySection: function () {
+                var sections = categoriesService.getSections(),
+                    sectionName = false;
+                angular.forEach(sections, function(section){
+                    if (!venues[section] || !venues[section].length) {
+                        sectionName = section;
+                        return sectionName;
+                    }
+                });
+                return sectionName;
+            },
+
+            /**
+             * retrieves the most valuable information
+             * from given array
+             * @param  {Array} items    [array of objects]
+             * @param  {String} section [name of section to save array into]
+             * @param  {[Boolean} save  [indicates if array should be saved to venues, default: true]
+             * @return {Array}          [array of objects]
+             */
+            decorateVenues: function (items, section, save) {
+                save = (save === undefined) ? true : save;
+                var venueCollection = [];
                 angular.forEach(items, function(item, index){
                     var venue = {
                         id: item.venue.id,
                         name: item.venue.name,
                         photo: {
-                            url: photoService.getImageUrl(item.venue.photos.groups[0].items[0]),
-                            width: item.venue.photos.groups[0].items[0].width,
-                            height: item.venue.photos.groups[0].items[0].height
+                            url: item.venue.photos.groups.length ? photoService.getImageUrl(item.venue.photos.groups[0].items[0]) : '',
+                            width: item.venue.photos.groups.length ? item.venue.photos.groups[0].items[0].width : 0,
+                            height: item.venue.photos.groups.length ? item.venue.photos.groups[0].items[0].height : 0
                         },
                         tip: {
-                            userId: item.tips[0].user.id || '',
-                            text: item.tips[0].text || 'Sorry this venue doesn\'t have any tip but We are sure that this is a great place'
+                            userId: item.tips ? item.tips[0].user.id : '',
+                            text: item.tips ? item.tips[0].text : 'Sorry this venue doesn\'t have any tip but We are sure that this is a great place'
                         },
-                        rating: item.rating || 0,
                         template: {
                             url: getTemplateUrl(item)
                         },
-                        justHide: false,
-                        justShow: false,
-                        current: false,
-                        next: false,
-                        zIndex: maxZIndex - offset - index
+                        category: {
+                            id: item.venue.categories[0].id,
+                            name: item.venue.categories[0].name,
+                            categoryParentId: categoriesService.getSection(item.venue.categories[0].id).id,
+                            categoryParentName: categoriesService.getSection(item.venue.categories[0].id).name,
+                            sectionName: categoriesService.getSection(item.venue.categories[0].id).sectionName
+                        },
+                        location: {
+                            url: getStaticMap(item.venue.location),
+                            address: item.venue.location.address,
+                            city: item.venue.location.city || geolocationService.getAddress(),
+                            postalCode: item.venue.location.postalCode
+                        },
+                        styling: {
+                            fontStyling: getFontStyling()
+                        },
+                        rating: {
+                            value : item.venue.rating || null,
+                            percentage: (item.venue.rating) ? item.venue.rating * 10 + '%' : null
+                        }
                     };
-                    venues.push(venue);
+                    venueCollection.push(venue);
+
                 });
 
-                return venues;
+                if (!venues[section] && save) {
+                    venues[section] = venueCollection;
+                }
+
+                return venueCollection;
             },
         }
     });
