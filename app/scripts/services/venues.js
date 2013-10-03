@@ -1,7 +1,7 @@
 angular.module('venues', []).
     factory('venuesService', function(photoService, categoriesService, geolocationService) {
-
-        var venues = {};
+        var venues = {},
+            compactVenues = {};
             fontStylings = [
                 'stylish',
                 'common',
@@ -38,6 +38,16 @@ angular.module('venues', []).
         return {
             getVenues: function () {
                 return venues;
+            },
+            getVenue: function (category, id) {
+                var retVenue = {};
+                angular.forEach(compactVenues[category].venues, function(venue) {
+                    if (venue.id === id) {
+                        retVenue = venue;
+                        return true;
+                    }
+                });
+                return retVenue;
             },
             getNextEmptySection: function () {
                 var sections = categoriesService.getSections(),
@@ -109,5 +119,41 @@ angular.module('venues', []).
 
                 return venueCollection;
             },
+            decorateCompactVenues: function (items) {
+                angular.forEach(items, function(item, index){
+                    var catParent = categoriesService.getSection(item.categories[0].id),
+                        catApiName = categoriesService.getCategoryApiName(catParent.name),
+                        venue = {
+                            id: item.id,
+                            name: item.name,
+                            tips: [],
+                            template: {
+                                url: getTemplateUrl(item)
+                            },
+                            photos: [],
+                            category: {
+                                id: item.categories[0].id,
+                                name: item.categories[0].name,
+                                categoryParentId: catParent.id,
+                                categoryParentName: catParent.name,
+                                apiName: catApiName
+                            },
+                            styling: {
+                                fontStyling: getFontStyling()
+                            },
+                            rating: (item.rating) ? item.rating*10 + '%' : null
+                        };
+                    if (!compactVenues[catApiName]) {
+                        compactVenues[catApiName] = {
+                            venues: [],
+                            name: catApiName,
+                            id: catParent.id
+                        };
+                    }
+                    compactVenues[catApiName].venues.push(venue);
+                });
+
+                return compactVenues;
+            }
         }
     });
