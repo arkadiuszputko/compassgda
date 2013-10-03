@@ -3,11 +3,11 @@
     </div>
     <div class="container">
         <div class="further-action">
-            <form action="/" method="POST">
-                <input type="text" placeholder="eg. Warszawa" />
+            <form ng-submit="onSubmit($event)">
+                <input type="text" placeholder="eg. Warszawa" ng-model="city" />
                 <input type="submit" value="Go there!" />
             </form>
-            <a class="found-city" href="#/board">Gdańsk <span>your current location</span></a>
+            <a class="found-city" href="#/board" ng-class="{isCity: geo.isCity}">{{geo.cityName}} <span>your current location</span></a>
         </div>
     </div>
 </section>
