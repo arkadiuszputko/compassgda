@@ -52,6 +52,16 @@ angular.module('categories', []).
                 }
                 return sectionName.replace(/\s&\s+/g, '-').toLowerCase();
             },
+            getNameById: function (id) {
+                var catName = false;
+                angular.forEach(categories, function(category){
+                    if (category.id === id) {
+                        catName = category.name;
+                        return true;
+                    }
+                });
+                return catName;
+            },
             getSections: function () {
                 var sectionsToReturn = [];
                 for (sectionName in sections) {
@@ -62,9 +72,7 @@ angular.module('categories', []).
             getCategoriesIds: function () {
                 var categoriesIds = [];
                 angular.forEach(categories, function(cat){
-                    if (cat.id !== '4d4b7105d754a06372d81259' && cat.id !== '4d4b7105d754a06375d81259' && cat.id !== '4e67e38e036454776db1fb3a') {
-                        categoriesIds.push(cat.id);
-                    }
+                    categoriesIds.push(cat.id);
                 });
                 return categoriesIds;
             },
