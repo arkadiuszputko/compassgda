@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('compassgdaApp', ['ngRoute', 'ngAnimate', 'foursquareAPI', 'photo', 'venues', 'venue', 'categories', 'geoAPI', 'storage'])
+angular.module('compassgdaApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'foursquareAPI', 'photo', 'venues', 'venue', 'categories', 'geoAPI', 'storage'])
     .config(function ($routeProvider) {
     $routeProvider
         .when('/', {
@@ -31,4 +31,9 @@ angular.module('compassgdaApp', ['ngRoute', 'ngAnimate', 'foursquareAPI', 'photo
         .otherwise({
             redirectTo: '/'
         });
-});
+    })
+    .filter('slice', function() {
+        return function(arr, start, end) {
+            return arr.slice(start, end);
+        };
+    });

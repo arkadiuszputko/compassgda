@@ -119,9 +119,9 @@ angular.module('venues', []).
 
                 return venueCollection;
             },
-            decorateCompactVenues: function (items) {
+            decorateCompactVenues: function (items, categoryId) {
                 angular.forEach(items, function(item, index){
-                    var catParent = categoriesService.getSection(item.categories[0].id),
+                    var catParent = categoriesService.getSection(categoryId),
                         catApiName = categoriesService.getCategoryApiName(catParent.name),
                         venue = {
                             id: item.id,
