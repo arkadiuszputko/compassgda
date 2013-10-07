@@ -10,6 +10,15 @@ angular.module('venues', []).
                 'magazine'
             ];
 
+        if (!compactVenues['topPicks']) {
+            compactVenues['topPicks'] = {
+                name: 'topPicks',
+                id: 0,
+                venues: [],
+                order: 0
+            };
+        };
+
         var getTemplateUrl = function (item) {
             /*if (item.venue.photos.groups.length && item.venue.photos.groups[0].items[0].height > 620) {
                 return 'views/bigPhoto.html';
@@ -17,7 +26,7 @@ angular.module('venues', []).
                 return 'views/smallPhoto.html';
             }*/
             return 'views/category.html';
-        }
+        };
 
         var getStaticMap = function(obj){
             var base = 'https://maps.googleapis.com/maps/api/staticmap?';
@@ -26,14 +35,14 @@ angular.module('venues', []).
             }else{
                 return null;
             }
-        }
+        };
 
         var getFontStyling = function(){
             var stylesLength = fontStylings.length - 1,
                 index = parseInt(stylesLength * Math.random(), 10);
 
             return fontStylings[index];
-        }
+        };
 
         return {
             getVenues: function () {
@@ -147,13 +156,49 @@ angular.module('venues', []).
                         compactVenues[catApiName] = {
                             venues: [],
                             name: catApiName,
-                            id: catParent.id
+                            id: catParent.id,
                         };
                     }
+                    compactVenues[catApiName].order = Object.keys(compactVenues).indexOf(catApiName);
                     compactVenues[catApiName].venues.push(venue);
                 });
 
                 return compactVenues;
+            },
+            addToTopPicks: function (venue) {
+                var topVenue = {};
+                angular.copy(venue, topVenue);
+                topVenue.topPick = true;
+                compactVenues['topPicks'].venues.push(topVenue);
+            },
+            getNextByOrder: function (order) {
+                var nextCat = false;
+                angular.forEach(compactVenues, function(venues) {
+                    if (venues.order === order + 1) {
+                        nextCat = venues.name;
+                        return true;
+                    }
+                });
+                return nextCat;
+            },
+            getPrevByOrder: function (order) {
+                var prevCat = false;
+                angular.forEach(compactVenues, function(venues) {
+                    if (venues.order === order - 1) {
+                        prevCat = venues.name;
+                        return true;
+                    }
+                });
+                return prevCat;
+            },
+            changeOrder: function (name) {
+                angular.forEach(compactVenues, function(venues){
+                    if (venues.order === 1) {
+                        var tmp = compactVenues[name].order;
+                        compactVenues[name].order = venues.order;
+                        venues.order = tmp;
+                    }
+                });
             }
         }
     });

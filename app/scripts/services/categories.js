@@ -1,16 +1,7 @@
 angular.module('categories', []).
     factory('categoriesService', function() {
 
-        var categories = {},
-            sections = {
-                'food' : ['Food'],
-                'drinks': ['Nightlife Spot', 'Gastropub'],
-                'coffee': ['Café', 'Restaurant'],
-                'shops': ['Shop & Service'],
-                'arts': ['Arts & Entertainment'],
-                'outdoors': ['Outdoors & Recreation', 'Park', 'Neighborhood', 'Beach', 'Athletics & Sports', 'Harbor'],
-                'sights': ['Outdoors & Recreation', 'Historic Site']
-            },
+        var categories = {};
 
             getSectionNameByCategory = function(cat) {
                 var sec = false;
@@ -23,6 +14,15 @@ angular.module('categories', []).
                     });
                 }
                 return sec;
+            },
+
+            setCategoryApiName = function (sectionName) {
+                if (sectionName === 'Nightlife Spot' || sectionName === 'Shop & Service') {
+                    return sectionName.split(/\s/)[0].toLowerCase();
+                } else if (sectionName === 'Professional & Other Places') {
+                    return 'professional';
+                }
+                return sectionName.replace(/\s&\s+/g, '-').toLowerCase();
             },
 
             getSectionName = function (section) {
@@ -43,14 +43,19 @@ angular.module('categories', []).
         return {
             setCategories: function (cat) {
                 categories = cat;
+                angular.forEach(categories, function(category){
+                    category.apiName = setCategoryApiName(category.name);
+                });
             },
-            getCategoryApiName: function (sectionName) {
-                if (sectionName === 'Nightlife Spot' || sectionName === 'Shop & Service') {
-                    return sectionName.split(/\s/)[0].toLowerCase();
-                } else if (sectionName === 'Professional & Other Places') {
-                    return 'professional';
-                }
-                return sectionName.replace(/\s&\s+/g, '-').toLowerCase();
+            getCategoryApiName: function (name) {
+                var returnName = '';
+                angular.forEach(categories, function(category){
+                    if (name === category.name || name === category.id) {
+                        returnName = category.apiName;
+                        return true;
+                    }
+                });
+                return returnName;
             },
             getNameById: function (id) {
                 var catName = false;

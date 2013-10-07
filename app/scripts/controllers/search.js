@@ -31,6 +31,8 @@ angular.module('compassgdaApp')
                     getVenues(categoriesIds[6]);
                     getVenues(categoriesIds[7]);
                     getVenues(categoriesIds[8]);
+                },
+                function error (res) {
                 });
             },
 
@@ -44,38 +46,11 @@ angular.module('compassgdaApp')
                 function searchSuccess (res) {
                     var thisCategory = categoriesService.getCategoryApiName(categoriesService.getNameById(categoryId));
                     $scope.venuesSections = venuesService.decorateCompactVenues(res.response.venues, categoryId);
-                    if (!$scope.currentCategory) {
-                        $scope.currentCategory = thisCategory;
-                        $scope.venuesSections[thisCategory].current = true;
-                    }
-
-                    if (!$scope.currentVenue) {
-                        $scope.currentVenue = $scope.venuesSections[$scope.currentCategory].venues[0];
-                        $scope.venuesSections[thisCategory].venues[0].current = true;
-                        getVenueDetails($scope.venuesSections[thisCategory].venues[0]);
-                        getVenueDetails(getNextVenue($scope.currentVenue));
-                        getVenueDetails(getNextVenue(getNextVenue($scope.currentVenue)));
-                    } else {
-                        getVenueDetails($scope.venuesSections[thisCategory].venues[0]);
-                    }
+                    getVenueDetails($scope.venuesSections[thisCategory].venues[0]);
+                    venuesService.addToTopPicks($scope.venuesSections[thisCategory].venues[0]);
+                    setFirstCurrients();
                 },
                 function searchError (res) {
-
-                });
-            },
-
-            getNextVenuesFromApi = function (venue) {
-                foursquareVenuesSearch.query({
-                    ll: '54.352025, 18.646638',
-                    v: date,
-                    limit: 50,
-                    categoryId: venue.category.categoryParentId
-                },
-                function searchSuccess (res) {
-                    $scope.venuesSections = venuesService.decorateCompactVenues(res.response.venues, venue.category.categoryParentId);
-                },
-                function searchError (res) {
-
                 });
             },
 
@@ -84,13 +59,37 @@ angular.module('compassgdaApp')
                     venue_id: venue.id
                 },
                 function getVenueSuccess (res) {
-                    venuesService.getVenue(venue.category.apiName, venue.id);
-                    venueService.addVenuePhotos(venuesService.getVenue(venue.category.apiName, venue.id), res.response.venue.photos);
-                    venueService.addVenueTips(venuesService.getVenue(venue.category.apiName, venue.id), res.response.venue.tips);
-                    getFirstPhoto(venuesService.getVenue(venue.category.apiName, venue.id));
-                    getFirstTip(venuesService.getVenue(venue.category.apiName, venue.id));
+                    if (venue.topPick) {
+                        venuesService.getVenue('topPicks', venue.id);
+                        venueService.addVenuePhotos(venuesService.getVenue('topPicks', venue.id), res.response.venue.photos);
+                        venueService.addVenueTips(venuesService.getVenue('topPicks', venue.id), res.response.venue.tips);
+                        getFirstPhoto(venuesService.getVenue('topPicks', venue.id));
+                        getFirstTip(venuesService.getVenue('topPicks', venue.id));
+                    } else {
+                        venuesService.getVenue(venue.category.apiName, venue.id);
+                        venueService.addVenuePhotos(venuesService.getVenue(venue.category.apiName, venue.id), res.response.venue.photos);
+                        venueService.addVenueTips(venuesService.getVenue(venue.category.apiName, venue.id), res.response.venue.tips);
+                        getFirstPhoto(venuesService.getVenue(venue.category.apiName, venue.id));
+                        getFirstTip(venuesService.getVenue(venue.category.apiName, venue.id));
+                    }
                 },
                 function getVenueError (res) {
+                });
+            },
+
+            setFirstCurrients = function () {
+                $scope.currentCategory = 'topPicks';
+                $scope.venuesSections[$scope.currentCategory].current = true;
+                $scope.currentVenue = $scope.venuesSections[$scope.currentCategory].venues[0];
+                if (!$scope.currentVenue.isComplite) {
+                    getVenueDetails($scope.currentVenue);
+                }
+                $scope.venuesSections[$scope.currentCategory].venues[0].current = true;
+                $scope.venuesSections[$scope.currentCategory].currentVenue = $scope.venuesSections[$scope.currentCategory].venues[0];
+                angular.forEach($scope.venuesSections[$scope.currentCategory].venues, function(venue){
+                    if (!venue.isComplete) {
+                        getVenueDetails(venue);
+                    }
                 });
             },
 
@@ -111,23 +110,36 @@ angular.module('compassgdaApp')
                 }
             },
             getNextVenue = function (venue) {
-                var index = $scope.venuesSections[venue.category.apiName].venues.indexOf(venue),
-                    nextVenue = $scope.venuesSections[venue.category.apiName].venues[index + 1];
+                if (venue.topPick) {
+                    var index = $scope.venuesSections['topPicks'].venues.indexOf(venue),
+                        nextVenue = $scope.venuesSections['topPicks'].venues[index + 1];
+                } else {
+                    var index = $scope.venuesSections[venue.category.apiName].venues.indexOf(venue),
+                        nextVenue = $scope.venuesSections[venue.category.apiName].venues[index + 1];
+                }
                 return nextVenue;
             },
             getPrevVenue = function (venue) {
-                var index = $scope.venuesSections[venue.category.apiName].venues.indexOf(venue);
-                return $scope.venuesSections[venue.category.apiName].venues[index - 1];
+                if (venue.topPick) {
+                    var index = $scope.venuesSections['topPicks'].venues.indexOf(venue),
+                        prevVenue = $scope.venuesSections['topPicks'].venues[index - 1];
+                } else {
+                    var index = $scope.venuesSections[venue.category.apiName].venues.indexOf(venue),
+                        prevVenue = $scope.venuesSections[venue.category.apiName].venues[index - 1];
+                }
+                return prevVenue;
             },
             getNextCategory = function (venue) {
-                var index = Object.keys($scope.venuesSections).indexOf(venue.category.apiName),
-                    nextCat = Object.keys($scope.venuesSections)[index + 1];
+                if (venue.topPick) {
+                    var nextCat = venue.category.apiName;
+                    venuesService.changeOrder(nextCat);
+                } else {
+                    var nextCat = venuesService.getNextByOrder($scope.venuesSections[venue.category.apiName].order);
+                }
                 return nextCat;
             },
             getPrevCategory = function (venue) {
-                var index = Object.keys($scope.venuesSections).indexOf(venue.category.apiName),
-                    nextCat = Object.keys($scope.venuesSections)[index - 1];
-                return nextCat;
+                return venue.topPick ? false : venuesService.getPrevByOrder($scope.venuesSections[venue.category.apiName].order);
             },
             checkIfLocationAvailable = function(){
                 if(!geolocationService.isPositionSet()) {
@@ -138,10 +150,18 @@ angular.module('compassgdaApp')
                 }
             },
             getVenueIndex = function (venue) {
-                return $scope.venuesSections[venue.category.apiName].venues.indexOf(venue);
+                if (venue.topPick) {
+                    return $scope.venuesSections['topPicks'].venues.indexOf(venue);
+                } else {
+                    return $scope.venuesSections[venue.category.apiName].venues.indexOf(venue);
+                }
             },
             getVenuesCount = function (venue) {
-                return $scope.venuesSections[venue.category.apiName].venues.length;
+                if (venue.topPick) {
+                    return $scope.venuesSections['topPicks'].venues.length;
+                } else {
+                    return $scope.venuesSections[venue.category.apiName].venues.length;
+                }
             };
 
         $scope.showNextVenue = function (venue) {
@@ -149,15 +169,16 @@ angular.module('compassgdaApp')
             $scope.isBack = false;
             var nextVenue = getNextVenue(venue);
             venue.current = false;
-            if (nextVenue) { nextVenue.current = true; }
+            if (nextVenue) {
+                nextVenue.current = true;
+                $scope.venuesSections[$scope.currentCategory].currentVenue = nextVenue;
+                $scope.currentVenue = nextVenue;
+            }
             if (getNextVenue(nextVenue)) {
                 if (!getNextVenue(nextVenue).isComplete) {
                     getVenueDetails(getNextVenue(nextVenue));
                 }
-            } else {
-                //getNextVenuesFromApi(venue);
             }
-            $scope.currentVenue = nextVenue;
         };
         $scope.showPrevVenue = function (venue) {
             $scope.isForward = false;
@@ -165,6 +186,7 @@ angular.module('compassgdaApp')
             var prevVenue = getPrevVenue(venue);
             venue.current = false;
             prevVenue.current = true;
+            $scope.venuesSections[$scope.currentCategory].currentVenue = prevVenue;
             $scope.currentVenue = prevVenue;
         };
         $scope.showNextCategory = function (venue) {
@@ -172,12 +194,17 @@ angular.module('compassgdaApp')
             $scope.isUp = false;
             var nextCategory = getNextCategory(venue);
             if (nextCategory) {
-                var nextVenue = $scope.venuesSections[nextCategory].venues[0];
+                if (!$scope.venuesSections[nextCategory].currentVenue) {
+                    var nextVenue = $scope.venuesSections[nextCategory].venues[0];
+                } else {
+                    var nextVenue = $scope.venuesSections[nextCategory].currentVenue;
+                }
                 $scope.venuesSections[$scope.currentCategory].current = false;
                 $scope.venuesSections[nextCategory].current = true;
             }
             if (nextVenue) {
                 nextVenue.current = true;
+                $scope.currentVenue = nextVenue;
                 if (getNextVenue(nextVenue) && !getNextVenue(nextVenue).isComplete) {
                     getVenueDetails(getNextVenue(nextVenue));
                 }
@@ -186,17 +213,22 @@ angular.module('compassgdaApp')
                 }
                 $scope.currentCategory = nextCategory;
             }
-            $scope.currentVenue = $scope.venuesSections[$scope.currentCategory].venues[0];
         };
         $scope.showPrevCategory = function (venue) {
             $scope.isDown = false;
             $scope.isUp = true;
             var prevCategory = getPrevCategory(venue);
-            $scope.venuesSections[$scope.currentCategory].current = false;
-            $scope.venuesSections[prevCategory].current = true;
-            $scope.venuesSections[prevCategory].venues[0].current = true;
-            $scope.currentCategory = prevCategory;
-            $scope.currentVenue = $scope.venuesSections[$scope.currentCategory].venues[0];
+            if (prevCategory) {
+                $scope.venuesSections[$scope.currentCategory].current = false;
+                $scope.venuesSections[prevCategory].current = true;
+                if (!$scope.venuesSections[prevCategory].currentVenue) {
+                    var prevVenue = $scope.venuesSections[prevCategory].venues[0];
+                } else {
+                    var prevVenue = $scope.venuesSections[prevCategory].currentVenue;
+                }
+                $scope.currentCategory = prevCategory;
+                $scope.currentVenue = prevVenue;
+            }
         };
 
         $scope.toggleNav = function(){
@@ -204,27 +236,39 @@ angular.module('compassgdaApp')
             $scope.nav.button = !$scope.nav.button;
         };
 
-        $scope.getVenueStart = function () {
-            var index = getVenueIndex($scope.currentVenue),
-                length = getVenuesCount($scope.currentVenue) - 1;
-            if (index === 0 || index === 1) {
-                return 0;
-            } else if (index === length) {
-                return length - 1;
+        $scope.getVenueStart = function (name) {
+            if ($scope.venuesSections[name] && $scope.venuesSections[name].currentVenue) {
+                var currentVenue = $scope.venuesSections[name].currentVenue,
+                    index = getVenueIndex(currentVenue),
+                    length = getVenuesCount(currentVenue) - 1;
+                if (index === 0 || index === 1) {
+                    return 0;
+                } else if (index === length) {
+                    return length - 1;
+                } else {
+                    return index - 2;
+                }
             } else {
-                return index - 2;
+                return 0;
             }
         };
 
-        $scope.getVenueEnd = function () {
-            var index = getVenueIndex($scope.currentVenue),
-                length = getVenuesCount($scope.currentVenue) - 1;
-            if (index === 0) {
-                return 2;
-            } else if (index === length || index === length - 1) {
-                return length;
+        $scope.getVenueEnd = function (name) {
+            if ($scope.venuesSections[name] && $scope.venuesSections[name].currentVenue) {
+                var currentVenue = $scope.venuesSections[name].currentVenue,
+                    index = getVenueIndex(currentVenue),
+                    length = getVenuesCount(currentVenue) - 1;
+                if (index === 0) {
+                    return 2;
+                } else if (index === length) {
+                    return length + 1;
+                } else if (index === length - 1) {
+                    return length + 1;
+                } else {
+                    return index + 2;
+                }
             } else {
-                return index + 2;
+                return 2;
             }
         };
 
@@ -237,7 +281,7 @@ angular.module('compassgdaApp')
                 });
             } else if (event.which === 39) {
                 $scope.$apply(function () {
-                    if (getVenueIndex($scope.currentVenue) !== getVenuesCount($scope.currentVenue)) {
+                    if (getVenueIndex($scope.currentVenue) !== getVenuesCount($scope.currentVenue) - 1) {
                         $scope.showNextVenue($scope.currentVenue);
                     }
                 });
@@ -253,5 +297,4 @@ angular.module('compassgdaApp')
         });
         checkIfLocationAvailable();
         getCategories();
-
     });
