@@ -6,27 +6,32 @@ angular.module('compassgdaApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'foursqua
         .when('/', {
             templateUrl: 'views/intro.html',
             controller: 'IntroCtrl',
-            reloadOnSearch:false
+            reloadOnSearch: false
         })
         .when('/board', {
             templateUrl: 'views/main.html',
             controller: 'MainCtrl',
-            reloadOnSearch:false
+            reloadOnSearch: false
         })
         .when('/venue/:venueId', {
             templateUrl: 'views/venue.html',
             controller: 'VenueCtrl',
-            reloadOnSearch:false
+            reloadOnSearch: false
         })
         .when('/search', {
             templateUrl: 'views/main.html',
             controller: 'SearchCtrl',
-            reloadOnSearch:false
+            reloadOnSearch: false
+        })
+        .when('/venues/:venuesName', {
+            templateUrl: 'views/venues.html',
+            controller: 'VenuesCtrl',
+            reloadOnSearch: false
         })
         .when('/section/:sectionName', {
             templateUrl: 'views/section.html',
             controller: 'SectionCtrl',
-            reloadOnSearch:false
+            reloadOnSearch: false
         })
         .otherwise({
             redirectTo: '/'
