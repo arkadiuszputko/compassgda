@@ -1,7 +1,7 @@
 <section class="wrapper" ng-class="{menuopen: nav.shown}">
     <div class="slides-container">
         <ul ng-repeat="venues in venuesSections" class="venues {{venues.name}}" ng-class="{'forward': isForward, 'backward': isBack, 'up': isUp, 'down': isDown}" ng-show="venues.current">
-            <li data-start="{{getVenueStart()}}" data-end="{{getVenueEnd()}}" class="venue" ng-repeat="venue in venues.venues | slice:getVenueStart():getVenueEnd()" ng-show="venue.current" ng-click="getNextVenue(venues.name, $index)">
+            <li data-index="{{$index}}" class="venue" ng-repeat="venue in venues.venues | slice:getVenueStart(venues.name):getVenueEnd(venues.name)" ng-show="venue.current" ng-click="getNextVenue(venues.name, $index)">
                 <div ng-include="venue.template.url"></div>
             </li>
         </ul>
