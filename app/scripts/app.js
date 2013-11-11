@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('compassgdaApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'foursquareAPI', 'photo', 'venues', 'venue', 'categories', 'geoAPI', 'storage'])
+angular.module('compassgdaApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'foursquareAPI', 'compassgdaApp.categoriesApi', 'compassgdaApp.venuesApi', 'compassgdaApp.venueApi', 'photos', 'tips', 'venues', 'venue', 'categories', 'geoAPI', 'storage'])
     .config(function ($routeProvider) {
     $routeProvider
         .when('/', {
@@ -15,6 +15,20 @@ angular.module('compassgdaApp', ['ngRoute', 'ngAnimate', 'ngSanitize', 'foursqua
         })
         .when('/venue/:venueId', {
             templateUrl: 'views/venue.html',
+            controller: 'VenueCtrl',
+            reloadOnSearch: false
+        })
+        .when('/:cityName/', {
+            templateUrl: 'modules/city/city.html',
+            controller: 'CityCtrl'
+        })
+        .when('/:cityName/:categoryName', {
+            templateUrl: 'modules/category/category.html',
+            controller: 'CategoryCtrl',
+            reloadOnSearch: false
+        })
+        .when('/:cityName/:categoryName/:venueName', {
+            templateUrl: 'modules/venue/venue.html',
             controller: 'VenueCtrl',
             reloadOnSearch: false
         })
