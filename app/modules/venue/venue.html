@@ -1,0 +1,11 @@
+<div class="venue-holder">
+    <ul class="photos count-{{venue.photos.count}}">
+        <li class="photo" ng-repeat="photo in venue.photos.list" style="background-image: url({{photo.url}})">
+        </li>
+    </ul>
+    <ul class="tips count-{{venue.tips.count}}">
+        <li class="tip" ng-repeat="tip in venue.tips.list">
+            <h2>{{tip.text}}</h2>
+        </li>
+    </ul>
+</div>
