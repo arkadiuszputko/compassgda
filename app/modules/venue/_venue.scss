@@ -1,0 +1,48 @@
+.venue-holder {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    ul.photos {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        &.count-6 li {
+            width: 33%;
+            height: 50%;
+            border: 2px solid #fff;
+            box-sizing: border-box;
+            background-size: cover;
+            float: left;
+        }
+    }
+    ul.tips {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: table;
+        li {
+            color: #fff;
+        }
+        &.count-9 li {
+            display: table-cell;
+            vertical-align: middle;
+            width: 33%;
+            height: 50%;
+            padding: 5em;
+            box-sizing: border-box;
+            background-size: cover;
+            float: left;
+            color: #fff;
+        }
+    }
+}

@@ -1,0 +1,9 @@
+<ul class="covers">
+	<li class="category-cover" ng-repeat="venue in categoriesCovers | limitTo:4">
+        <div ng-click="goToCategory(venue.parentCategory.appName)" style="background-image: url({{venue.photos.list[0].url}})">
+            <div class="icon"><img src="{{venue.parentCategory.iconUrl}}" /></div>
+            <h1>{{venue.parentCategory.name}}</h1>
+            <div class="venue">{{venue.name}}
+        </div>
+	</li>
+</ul>
